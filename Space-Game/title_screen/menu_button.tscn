@@ -1,0 +1,28 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://MainFont_25.tres" type="DynamicFont" id=1]
+
+[node name="MenuButton" type="Button"]
+margin_right = 160.0
+margin_bottom = 20.0
+focus_mode = 0
+action_mode = 0
+enabled_focus_mode = 0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="."]
+margin_top = -3.0
+margin_right = 160.0
+margin_bottom = 19.0
+custom_fonts/font = ExtResource( 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 0
+custom_constants/shadow_offset_y = 2
+text = "Label"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
