@@ -8,9 +8,14 @@
 
 config_version=4
 
-_global_script_classes=[  ]
+_global_script_classes=[ {
+"base": "VisualShaderNodeCustom",
+"class": "VisualShaderNodePerlinNoise3D",
+"language": "GDScript",
+"path": "res://noise_script.gd"
+} ]
 _global_script_class_icons={
-
+"VisualShaderNodePerlinNoise3D": ""
 }
 
 [application]
