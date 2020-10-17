@@ -1,5 +1,4 @@
 shader_type spatial;
-render_mode specular_schlick_ggx;
 
 uniform vec4 colour1 : hint_color = vec4(0.33,0.45,0.53,1);
 uniform vec4 colour2 : hint_color = vec4(0.88,0.91,0.67,1);
@@ -10,7 +9,6 @@ uniform float colour2_Threshold : hint_range(0,1) = 0.516;
 uniform float colour3_Threshold : hint_range(0,1) = 0.634;
 
 uniform sampler2D Base_Albedo : hint_albedo;
-uniform vec2 Albedo_Size;
 
 void fragment() {
 	vec2 _uv = UV;

@@ -5,10 +5,9 @@
 [sub_resource type="GDScript" id=1]
 
 [sub_resource type="OpenSimplexNoise" id=2]
-seed = 1
-octaves = 9
-period = 65.5
-lacunarity = 2.23
+seed = 4
+octaves = 5
+persistence = 0.629
 
 [sub_resource type="NoiseTexture" id=3]
 width = 400

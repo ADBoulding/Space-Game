@@ -1,33 +1,28 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
-[ext_resource path="res://Planet_Gen/world_gen.tres" type="SphereMesh" id=1]
+[ext_resource path="res://Scenes/SolarSystem.gd" type="Script" id=1]
 [ext_resource path="res://Planet_Gen/4MUGBG.jpg" type="Texture" id=2]
 
-[sub_resource type="PanoramaSky" id=5]
+[sub_resource type="PanoramaSky" id=1]
 radiance_size = 4
 panorama = ExtResource( 2 )
 
 [sub_resource type="Environment" id=2]
 background_mode = 2
-background_sky = SubResource( 5 )
+background_sky = SubResource( 1 )
 ambient_light_color = Color( 1, 1, 1, 1 )
 ambient_light_energy = 6.73
 ambient_light_sky_contribution = 0.88
 
-[node name="Spatial" type="Spatial"]
+[sub_resource type="SphereMesh" id=3]
+radius = 10.0
+height = 20.0
+
+[node name="System" type="Spatial"]
+script = ExtResource( 1 )
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource( 2 )
-
-[node name="MeshInstance" type="MeshInstance" parent="."]
-mesh = ExtResource( 1 )
-material/0 = null
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="MeshInstance"]
-
-[node name="Camera" type="Camera" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4.7499 )
-fov = 50.8
 
 [node name="Control" type="Control" parent="."]
 anchor_right = 1.0
@@ -35,3 +30,34 @@ anchor_bottom = 1.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="TextEdit" type="TextEdit" parent="Control"]
+margin_left = 17.0
+margin_top = 321.5
+margin_right = 114.0
+margin_bottom = 341.5
+text = "Planet ID"
+
+[node name="Button" type="Button" parent="Control"]
+margin_left = 17.0
+margin_top = 286.0
+margin_right = 109.0
+margin_bottom = 306.0
+text = "Generate"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Button2" type="Button" parent="Control"]
+margin_left = 125.0
+margin_top = 322.0
+margin_right = 174.0
+margin_bottom = 342.0
+text = "Go"
+
+[node name="Camera" type="Camera" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 26.5631, 0, 47.1148 )
+fov = 50.8
+
+[node name="CSGMesh" type="CSGMesh" parent="."]
+mesh = SubResource( 3 )

@@ -24,6 +24,10 @@ config/name="Space-Game"
 run/main_scene="res://Scenes/title_screen.tscn"
 config/icon="res://icon.png"
 
+[autoload]
+
+Global="*res://Global.gd"
+
 [display]
 
 window/size/width=640
