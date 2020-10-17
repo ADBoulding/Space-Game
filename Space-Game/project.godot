@@ -12,7 +12,7 @@ _global_script_classes=[ {
 "base": "VisualShaderNodeCustom",
 "class": "VisualShaderNodePerlinNoise3D",
 "language": "GDScript",
-"path": "res://noise_script.gd"
+"path": "res://Planet_Gen/noise_script.gd"
 } ]
 _global_script_class_icons={
 "VisualShaderNodePerlinNoise3D": ""

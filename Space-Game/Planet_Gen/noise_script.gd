@@ -146,4 +146,4 @@ func _get_global_code(mode):
 
 
 func _get_code(input_vars, output_vars, mode, type):
-	return output_vars[0] + " = cnoise(%s * %s) * 0.5 + 0.5;" % [input_vars[0], input_vars[1], input_vars[2], input_vars[3]]
+	return output_vars[0] + " = cnoise(%s * %s) * 0.5 + 0.5;" % [input_vars[0], input_vars[1]]
