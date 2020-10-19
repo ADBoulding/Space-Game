@@ -1,11 +1,25 @@
 [gd_scene load_steps=2 format=2]
 
-[ext_resource path="res://Scenes/test_procedural.gd" type="Script" id=1]
+[sub_resource type="GDScript" id=1]
+script/source = "extends Control
+
+var noise = OpenSimplexNoise.new()
+var noise_texture = NoiseTexture.new()
+
+func _ready():
+	noise_texture.noise = noise
+	$TextureRect.texture = noise_texture
+	
+	
+#	var image = noise.get_seamless_image(640)
+#	var updatedImage = ImageTexture.new().create_from_image(image)
+#	self.texture = updatedImage
+"
 
 [node name="Control" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-script = ExtResource( 1 )
+script = SubResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }

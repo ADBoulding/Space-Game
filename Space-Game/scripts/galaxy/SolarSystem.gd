@@ -11,7 +11,7 @@ func _ready():
 	system = Global.systemContainer[SystemID]
 	for _p in system.planets:
 		var planet = load("res://Scenes/Planet.tscn").instance()
-		planet.translation.x = _p.locID * 10 + 20
+		planet.translation.x = _p.locID * 5 + 15
 		planet.mesh.radius = _p.radius
 		planet.mesh.height = _p.radius * 2
 		planet.setID(SystemID, _p.locID, _p.id)

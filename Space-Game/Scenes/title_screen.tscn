@@ -1,69 +1,77 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=5 format=2]
 
-[ext_resource path="res://assets/backgrounds/Ship_BG3.png" type="Texture" id=1]
-[ext_resource path="res://title_screen/OptionButton.tscn" type="PackedScene" id=2]
-[ext_resource path="res://title_screen/ContinueButton.tscn" type="PackedScene" id=3]
-[ext_resource path="res://title_screen/NewGameButton.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Scenes/title_screen/OptionButton.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Scenes/title_screen/ContinueButton.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Scenes/title_screen/NewGameButton.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Fonts/font.tres" type="DynamicFont" id=5]
 
 [node name="TitleScreen" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 __meta__ = {
-"_edit_horizontal_guides_": [ 180.538 ],
+"_edit_horizontal_guides_": [ 120.076 ],
 "_edit_use_anchors_": false,
-"_edit_vertical_guides_": [ 320.422 ]
+"_edit_vertical_guides_": [ 218.194 ]
 }
-
-[node name="Ship_BG3" type="Sprite" parent="."]
-position = Vector2( 320, 160 )
-texture = ExtResource( 1 )
 
 [node name="ColorRect" type="ColorRect" parent="."]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -150.0
-margin_top = -80.0
-margin_right = 150.0
-margin_bottom = -40.0
+margin_left = -125.0
+margin_top = -60.0
+margin_right = 125.0
+margin_bottom = -30.0
 grow_horizontal = 2
 grow_vertical = 2
+size_flags_horizontal = 2
+size_flags_vertical = 2
 color = Color( 0.0235294, 0.0235294, 0.0235294, 0.658824 )
 __meta__ = {
+"_edit_group_": true,
 "_edit_use_anchors_": false
 }
 
 [node name="Label" type="Label" parent="ColorRect"]
-margin_right = 300.0
-margin_bottom = 35.0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -100.0
+margin_top = -12.5
+margin_right = 100.0
+margin_bottom = 12.5
 custom_fonts/font = ExtResource( 5 )
 text = "Generic Space Game"
 align = 1
 valign = 1
 __meta__ = {
-"_edit_use_anchors_": true
+"_edit_use_anchors_": false
 }
 
 [node name="Menu" type="VBoxContainer" parent="."]
-margin_left = 240.0
-margin_top = 170.0
-margin_right = 400.0
-margin_bottom = 320.149
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -80.0
+margin_top = -20.0
+margin_right = 80.0
+margin_bottom = 80.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Buttons" type="VBoxContainer" parent="Menu"]
 margin_right = 160.0
-margin_bottom = 150.0
+margin_bottom = 100.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="ContinueButton" parent="Menu/Buttons" instance=ExtResource( 3 )]
-
 [node name="NewGameButton" parent="Menu/Buttons" instance=ExtResource( 4 )]
+
+[node name="ContinueButton" parent="Menu/Buttons" instance=ExtResource( 3 )]
 margin_top = 24.0
 margin_bottom = 44.0
 

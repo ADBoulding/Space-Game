@@ -1,13 +1,19 @@
 [gd_scene load_steps=7 format=2]
 
-[ext_resource path="res://Planet_Gen/Planet_Shader.shader" type="Shader" id=2]
+[ext_resource path="res://Scenes/Planet_Gen/Planet_Shader.shader" type="Shader" id=2]
 
 [sub_resource type="SphereMesh" id=1]
 resource_local_to_scene = true
 
 [sub_resource type="OpenSimplexNoise" id=2]
+octaves = 5
+period = 180.0
+persistence = 1.0
+lacunarity = 4.0
 
 [sub_resource type="NoiseTexture" id=3]
+width = 400
+height = 400
 seamless = true
 noise = SubResource( 2 )
 
@@ -17,9 +23,9 @@ shader = ExtResource( 2 )
 shader_param/colour1 = Color( 0.33, 0.45, 0.53, 1 )
 shader_param/colour2 = Color( 0.88, 0.91, 0.67, 1 )
 shader_param/colour3 = Color( 0.58, 0.88, 0.51, 1 )
-shader_param/colour1_Threshold = 0.428
-shader_param/colour2_Threshold = 0.516
-shader_param/colour3_Threshold = 0.634
+shader_param/colour1_Threshold = 0.45
+shader_param/colour2_Threshold = 0.5
+shader_param/colour3_Threshold = 0.55
 shader_param/Base_Albedo = SubResource( 3 )
 
 [sub_resource type="GDScript" id=5]
@@ -56,6 +62,13 @@ func _load_planet():
 		print(\"everything is Kosher\")
 		planet = Global.systemContainer[SystemID].planets[LocalID]
 		
+		colour1 = planet.colour1
+		colour2 = planet.colour2
+		colour3 = planet.colour3
+		c1t = planet.c1t
+		c2t = planet.c2t
+		c3t = planet.c3t
+		
 		noise.seed = planet.nSeed
 		noise.octaves = planet.octaves
 		noise.period = planet.period
@@ -72,6 +85,14 @@ func _draw_planet():
 	var image = noise.get_seamless_image(400)
 	var image_texture = ImageTexture.new()
 	image_texture.create_from_image(image)
+	
+	mat.set_shader_param(\"colour1\", colour1)
+	mat.set_shader_param(\"colour2\", colour2)
+	mat.set_shader_param(\"colour3\", colour3)
+	mat.set_shader_param(\"colour1_Threshold\", c1t)
+	mat.set_shader_param(\"colour2_Threshold\", c2t)
+	mat.set_shader_param(\"colour3_Threshold\", c3t)
+	
 	mat.set_shader_param(\"Base_Albedo\",image_texture)
 
 #Constructor for the script				
@@ -85,10 +106,10 @@ func setID(_sysID, _locID, _ID):
 func _ready()->void:
 	mat = self.get_surface_material(0)
 	_load_planet()
-	
-		
-	
 
+func _process(delta):
+	rotate_y(delta * planet.rotation)
+	pass
 "
 
 [node name="MeshInstance" type="MeshInstance"]
@@ -96,5 +117,6 @@ transform = Transform( 0.999999, 0, -0.00137881, 0, 1, 0, 0.00137881, 0, 0.99999
 mesh = SubResource( 1 )
 material/0 = SubResource( 4 )
 script = SubResource( 5 )
+colour1 = Color( 0.00392157, 0.0235294, 0.0352941, 1 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]

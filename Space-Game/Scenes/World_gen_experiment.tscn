@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=9 format=2]
 
-[ext_resource path="res://Scenes/SolarSystem.gd" type="Script" id=1]
-[ext_resource path="res://Planet_Gen/4MUGBG.jpg" type="Texture" id=2]
+[ext_resource path="res://scripts/galaxy/SolarSystem.gd" type="Script" id=1]
+[ext_resource path="res://Scenes/Planet_Gen/4MUGBG.jpg" type="Texture" id=2]
+[ext_resource path="res://assets/Lowres/lowres.shader" type="Shader" id=3]
 
 [sub_resource type="PanoramaSky" id=1]
 radiance_size = 4
@@ -14,7 +15,13 @@ ambient_light_color = Color( 1, 1, 1, 1 )
 ambient_light_energy = 6.73
 ambient_light_sky_contribution = 0.88
 
-[sub_resource type="SphereMesh" id=3]
+[sub_resource type="ShaderMaterial" id=3]
+shader = ExtResource( 3 )
+
+[sub_resource type="ImageTexture" id=4]
+size = Vector2( 64, 64 )
+
+[sub_resource type="SphereMesh" id=5]
 radius = 10.0
 height = 20.0
 
@@ -25,6 +32,7 @@ script = ExtResource( 1 )
 environment = SubResource( 2 )
 
 [node name="Control" type="Control" parent="."]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 __meta__ = {
@@ -55,9 +63,19 @@ margin_right = 174.0
 margin_bottom = 342.0
 text = "Go"
 
+[node name="TextureRect" type="TextureRect" parent="Control"]
+material = SubResource( 3 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 2
+size_flags_vertical = 2
+texture = SubResource( 4 )
+
 [node name="Camera" type="Camera" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 26.5631, 0, 47.1148 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 22.3305, 0, 22.598 )
 fov = 50.8
 
 [node name="CSGMesh" type="CSGMesh" parent="."]
-mesh = SubResource( 3 )
+mesh = SubResource( 5 )
