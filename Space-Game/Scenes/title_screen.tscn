@@ -1,9 +1,18 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=14 format=2]
 
+[ext_resource path="res://assets/ship/1_0008_Sky.png" type="Texture" id=1]
 [ext_resource path="res://Scenes/title_screen/OptionButton.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Scenes/title_screen/ContinueButton.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Scenes/title_screen/NewGameButton.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Fonts/font.tres" type="DynamicFont" id=5]
+[ext_resource path="res://assets/ship/1_0003_Cliffs_FG.png" type="Texture" id=6]
+[ext_resource path="res://assets/ship/1_0002_FG.png" type="Texture" id=7]
+[ext_resource path="res://assets/ship/1_0006_Desert.png" type="Texture" id=8]
+[ext_resource path="res://assets/ship/1_0005_Mountain_Mid_2.png" type="Texture" id=9]
+[ext_resource path="res://assets/ship/1_0007_Clouds.png" type="Texture" id=10]
+[ext_resource path="res://assets/ship/1_0004_Mountain_Mid.png" type="Texture" id=11]
+[ext_resource path="res://assets/ship/1_0000_Ship.png" type="Texture" id=12]
+[ext_resource path="res://assets/ship/1_0001_Shadow.png" type="Texture" id=13]
 
 [node name="TitleScreen" type="Control"]
 anchor_right = 1.0
@@ -13,6 +22,43 @@ __meta__ = {
 "_edit_use_anchors_": false,
 "_edit_vertical_guides_": [ 218.194 ]
 }
+
+[node name="1_0008_Sky" type="Sprite" parent="."]
+position = Vector2( 319.627, 192.917 )
+scale = Vector2( 0.708389, 0.708389 )
+texture = ExtResource( 1 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="1_0006_Desert" type="Sprite" parent="1_0008_Sky"]
+scale = Vector2( 1, 1 )
+texture = ExtResource( 8 )
+
+[node name="1_0007_Clouds" type="Sprite" parent="1_0008_Sky"]
+texture = ExtResource( 10 )
+
+[node name="1_0005_Mountain_Mid_2" type="Sprite" parent="1_0008_Sky"]
+texture = ExtResource( 9 )
+
+[node name="1_0004_Mountain_Mid" type="Sprite" parent="1_0008_Sky"]
+texture = ExtResource( 11 )
+
+[node name="1_0003_Cliffs_FG" type="Sprite" parent="1_0008_Sky"]
+texture = ExtResource( 6 )
+
+[node name="1_0002_FG" type="Sprite" parent="1_0008_Sky"]
+texture = ExtResource( 7 )
+
+[node name="1_0000_Ship" type="Sprite" parent="1_0008_Sky"]
+position = Vector2( 116.511, 155.98 )
+texture = ExtResource( 12 )
+
+[node name="1_0001_Shadow" type="Sprite" parent="1_0008_Sky/1_0000_Ship"]
+show_behind_parent = true
+position = Vector2( -1.54327, 11.9858 )
+scale = Vector2( 1, 1 )
+texture = ExtResource( 13 )
 
 [node name="ColorRect" type="ColorRect" parent="."]
 anchor_left = 0.5
