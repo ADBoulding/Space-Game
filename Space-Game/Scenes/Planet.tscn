@@ -112,7 +112,9 @@ func _process(delta):
 	pass
 "
 
-[node name="MeshInstance" type="MeshInstance"]
+[node name="MeshInstance" type="MeshInstance" groups=[
+"planetInstance",
+]]
 transform = Transform( 0.999999, 0, -0.00137881, 0, 1, 0, 0.00137881, 0, 0.999999, 0, 0, 0 )
 mesh = SubResource( 1 )
 material/0 = SubResource( 4 )

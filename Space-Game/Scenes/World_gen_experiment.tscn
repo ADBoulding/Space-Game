@@ -1,8 +1,8 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://scripts/galaxy/SolarSystem.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/Planet_Gen/4MUGBG.jpg" type="Texture" id=2]
-[ext_resource path="res://assets/Lowres/lowres.shader" type="Shader" id=3]
+[ext_resource path="res://Fonts/font.tres" type="DynamicFont" id=3]
 
 [sub_resource type="PanoramaSky" id=1]
 radiance_size = 4
@@ -15,13 +15,7 @@ ambient_light_color = Color( 1, 1, 1, 1 )
 ambient_light_energy = 6.73
 ambient_light_sky_contribution = 0.88
 
-[sub_resource type="ShaderMaterial" id=3]
-shader = ExtResource( 3 )
-
-[sub_resource type="ImageTexture" id=4]
-size = Vector2( 64, 64 )
-
-[sub_resource type="SphereMesh" id=5]
+[sub_resource type="SphereMesh" id=3]
 radius = 10.0
 height = 20.0
 
@@ -32,50 +26,53 @@ script = ExtResource( 1 )
 environment = SubResource( 2 )
 
 [node name="Control" type="Control" parent="."]
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="TextEdit" type="TextEdit" parent="Control"]
-margin_left = 17.0
-margin_top = 321.5
-margin_right = 114.0
-margin_bottom = 341.5
-text = "Planet ID"
-
-[node name="Button" type="Button" parent="Control"]
-margin_left = 17.0
-margin_top = 286.0
-margin_right = 109.0
-margin_bottom = 306.0
-text = "Generate"
+[node name="New_System" type="Button" parent="Control"]
+margin_left = 18.2599
+margin_top = 320.018
+margin_right = 110.26
+margin_bottom = 340.018
+action_mode = 0
+text = "New System"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Button2" type="Button" parent="Control"]
-margin_left = 125.0
-margin_top = 322.0
-margin_right = 174.0
-margin_bottom = 342.0
-text = "Go"
+[node name="Next" type="Button" parent="Control"]
+margin_left = 66.7501
+margin_top = 294.58
+margin_right = 108.75
+margin_bottom = 314.58
+text = "Next"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="TextureRect" type="TextureRect" parent="Control"]
-material = SubResource( 3 )
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 2
-size_flags_vertical = 2
-texture = SubResource( 4 )
+[node name="Prev" type="Button" parent="Control"]
+margin_left = 18.2312
+margin_top = 295.246
+margin_right = 58.2312
+margin_bottom = 315.246
+text = "Prev"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Control"]
+margin_left = 129.0
+margin_top = 299.0
+margin_right = 270.0
+margin_bottom = 344.0
+custom_fonts/font = ExtResource( 3 )
 
 [node name="Camera" type="Camera" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 22.3305, 0, 22.598 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 22.3305, 0, 38.8886 )
 fov = 50.8
 
 [node name="CSGMesh" type="CSGMesh" parent="."]
-mesh = SubResource( 5 )
+mesh = SubResource( 3 )

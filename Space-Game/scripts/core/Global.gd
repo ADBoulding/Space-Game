@@ -50,7 +50,7 @@ func addSystem(_num :=1):
 		var currentSystem = Global.systemNum
 		var system = SolarSystem.new(currentSystem, -1)
 		systemContainer.append(system)
-		Global.systemNum += 1
+		Global.systemNum = systemContainer.size()
 
 func init_system():
 	addSystem(1)
@@ -60,6 +60,10 @@ func init_system():
 func _ready():
 	init_system()
 
+func resetSystem():
+	systemContainer.clear()
+	print("CLEARING SYSTEM")
+	addSystem(1)
 
 ### CLASSES ###
 class SolarSystem:
