@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://assets/ship/1_0008_Sky.png" type="Texture" id=1]
 [ext_resource path="res://Scenes/title_screen/OptionButton.tscn" type="PackedScene" id=2]
@@ -13,15 +13,19 @@
 [ext_resource path="res://assets/ship/1_0004_Mountain_Mid.png" type="Texture" id=11]
 [ext_resource path="res://assets/ship/1_0000_Ship.png" type="Texture" id=12]
 [ext_resource path="res://assets/ship/1_0001_Shadow.png" type="Texture" id=13]
+[ext_resource path="res://scripts/core/title_screen.gd" type="Script" id=14]
+[ext_resource path="res://Scenes/galaxy_map/Galaxy_Map.tscn" type="PackedScene" id=15]
 
 [node name="TitleScreen" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+script = ExtResource( 14 )
 __meta__ = {
 "_edit_horizontal_guides_": [ 120.076 ],
 "_edit_use_anchors_": false,
 "_edit_vertical_guides_": [ 218.194 ]
 }
+target_scene = ExtResource( 15 )
 
 [node name="1_0008_Sky" type="Sprite" parent="."]
 position = Vector2( 319.627, 192.917 )
@@ -32,7 +36,6 @@ __meta__ = {
 }
 
 [node name="1_0006_Desert" type="Sprite" parent="1_0008_Sky"]
-scale = Vector2( 1, 1 )
 texture = ExtResource( 8 )
 
 [node name="1_0007_Clouds" type="Sprite" parent="1_0008_Sky"]
@@ -57,7 +60,6 @@ texture = ExtResource( 12 )
 [node name="1_0001_Shadow" type="Sprite" parent="1_0008_Sky/1_0000_Ship"]
 show_behind_parent = true
 position = Vector2( -1.54327, 11.9858 )
-scale = Vector2( 1, 1 )
 texture = ExtResource( 13 )
 
 [node name="ColorRect" type="ColorRect" parent="."]

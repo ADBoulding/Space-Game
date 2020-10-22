@@ -1,8 +1,8 @@
 extends Node
 
 var rng = RandomNumberGenerator.new()
-var planetNum = 0
-var systemNum = 0
+
+onready var windowSize = Vector2(ProjectSettings.get_setting("display/window/size/width"),ProjectSettings.get_setting("display/window/size/height"))
 
 enum PLANETTYPE {
 	earthLike,
@@ -41,34 +41,78 @@ var planetReference = {
 }
 
 var systemContainer = []
+var coordContainer = []
+var systemDictionary = {}
+var systemMapArray = []
+var discoveredSystems = []
+
+var currentSystem : Vector2
+
+var planetNum = 0
+var systemNum = 0
+
+var mapSize = 101
+var starChance = 7.0
 
 func randomizeRNG():
 	rng.randomize()
 
-func addSystem(_num :=1):
-	for n in range(_num):
-		var currentSystem = Global.systemNum
-		var system = SolarSystem.new(currentSystem, -1)
-		systemContainer.append(system)
-		Global.systemNum = systemContainer.size()
+func addSystemID(_ID : Vector2):
+	var system = SolarSystem.new(_ID, -1)
+	var x = str(_ID.x)
+	var y = str(_ID.y)
+	if systemDictionary.has(x) :
+		systemDictionary[x][y] = system
+	else:
+		systemDictionary[x] = {}
+		systemDictionary[x][y] = system
 
 func init_system():
-	addSystem(1)
+	planetNum = 0
+	systemNum = 0
+	systemContainer.clear()
+	coordContainer.clear()
+	systemDictionary.clear()
+	systemMapArray.clear()
+	buildMapArray()
+	for coord in coordContainer:
+		addSystemID(coord)
+	systemNum = coordContainer.size()
 	print("planets: " + str(planetNum))
 	print("systems: " + str(systemNum))
 			
 func _ready():
-	init_system()
+	pass
 
 func resetSystem():
 	systemContainer.clear()
 	print("CLEARING SYSTEM")
-	addSystem(1)
+	
+func buildMapArray():
+	coordContainer.clear()
+	randomizeRNG()
+	var matrix = []
+	for x in range(0,mapSize):
+		matrix.append([])
+		matrix[x] = []
+		for y in range(0,mapSize):
+			matrix[x].append([])
+			if 0 in [x,y] or mapSize in [x,y]:
+				matrix[x][y] = 0
+			else:
+				var num = rng.randf_range(0.0, 100.0)
+				if num > starChance:
+					matrix[x][y] = 0
+				else:
+					matrix[x][y] = 1
+					var keyVec = Vector2(x,y)
+					coordContainer.append(keyVec)
+	systemMapArray = matrix
 
 ### CLASSES ###
 class SolarSystem:
 	# Store planets and size
-	var id
+	var id : Vector2
 	var planets = []
 	var planetNum: int
 	var size setget ,size_get
@@ -109,15 +153,12 @@ class SolarSystem:
 		
 		var p = Planet.new(planetNum,_localID,radius,_c,_cT,nSeed,octaves,period,persistence,lacunarity)
 		planets.append(p)
-		print("generated a [" + planetType + "] world")
+		#print("generated a [" + planetType + "] world")
 		Global.planetNum += 1
 
-	func _init(_id := -1, _planetNum := -1):
+	func _init(_id : Vector2, _planetNum := -1):
 		Global.randomizeRNG()
-		if _id == -1:
-			id = Global.systemNum
-		else:	
-			id = _id
+		id = _id
 			
 		if _planetNum == -1:
 			planetNum = Global.rng.randi_range(1,8)

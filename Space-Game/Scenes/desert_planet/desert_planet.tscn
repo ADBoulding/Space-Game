@@ -169,11 +169,13 @@ transform = Transform2D( 1, 0, 0, 1, 320, 100 )
 texture = ExtResource( 2 )
 
 [node name="Sprite" type="Sprite" parent="."]
-position = Vector2( 441, 251 )
+visible = false
+position = Vector2( 704, 448 )
+scale = Vector2( 0.01, 0.01 )
 texture = ExtResource( 10 )
 
 [node name="Ship" parent="." instance=ExtResource( 9 )]
-position = Vector2( 440, 240 )
+position = Vector2( 440, -272 )
 script = ExtResource( 11 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Ship"]
@@ -181,6 +183,7 @@ playback_process_mode = 0
 anims/Landing = SubResource( 1 )
 
 [node name="Player" parent="." instance=ExtResource( 8 )]
+visible = false
 position = Vector2( 448, 264 )
 scale = Vector2( 0.3, 0.3 )
 [connection signal="animation_finished" from="Ship/AnimationPlayer" to="Ship" method="_on_AnimationPlayer_animation_finished" binds= [ false ]]

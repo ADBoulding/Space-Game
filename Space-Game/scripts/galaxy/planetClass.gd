@@ -69,7 +69,7 @@ func _draw_planet():
 	mat.set_shader_param("Base_Albedo",image_texture)
 	
 
-#Constructor for the script				
+#Constructor for the script
 func setID(_sysID, _locID, _ID):
 	SystemID = _sysID
 	LocalID = _locID
