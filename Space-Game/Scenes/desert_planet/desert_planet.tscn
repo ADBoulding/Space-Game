@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://assets/ship/1_0003_Cliffs_FG.png" type="Texture" id=1]
 [ext_resource path="res://assets/ship/1_0002_FG.png" type="Texture" id=2]
@@ -11,6 +11,7 @@
 [ext_resource path="res://Scenes/player/Ship.tscn" type="PackedScene" id=9]
 [ext_resource path="res://assets/ship/1_0001_Shadow.png" type="Texture" id=10]
 [ext_resource path="res://Scenes/player/Ship.gd" type="Script" id=11]
+[ext_resource path="res://Scenes/pause_screen/Pause.tscn" type="PackedScene" id=12]
 
 [sub_resource type="Animation" id=1]
 resource_name = "Landing"
@@ -186,4 +187,6 @@ anims/Landing = SubResource( 1 )
 visible = false
 position = Vector2( 448, 264 )
 scale = Vector2( 0.3, 0.3 )
+
+[node name="Pause_Menu" parent="." instance=ExtResource( 12 )]
 [connection signal="animation_finished" from="Ship/AnimationPlayer" to="Ship" method="_on_AnimationPlayer_animation_finished" binds= [ false ]]

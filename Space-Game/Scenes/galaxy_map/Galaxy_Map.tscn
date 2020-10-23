@@ -1,20 +1,21 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Scenes/galaxy_map/space_Tile.png" type="Texture" id=1]
 [ext_resource path="res://Scenes/galaxy_map/randomStars.gd" type="Script" id=2]
 [ext_resource path="res://Scenes/galaxy_map/GalaxyCam.gd" type="Script" id=3]
 [ext_resource path="res://assets/ship/1_0000_Ship.png" type="Texture" id=4]
 [ext_resource path="res://Scenes/galaxy_map/Galaxy_Map.gd" type="Script" id=5]
+[ext_resource path="res://Scenes/pause_screen/Pause.tscn" type="PackedScene" id=6]
 
-[sub_resource type="NavigationPolygon" id=2]
+[sub_resource type="NavigationPolygon" id=1]
 vertices = PoolVector2Array( 32.7294, 32.77, -1.23777, 32.77, -1.23777, -0.99437, 32.7294, -0.99437 )
 polygons = [ PoolIntArray( 0, 1, 2, 3 ) ]
 
-[sub_resource type="NavigationPolygon" id=3]
+[sub_resource type="NavigationPolygon" id=2]
 vertices = PoolVector2Array( -0.798035, 32.7102, 32.7711, 32.7102, 32.7711, -0.547298, -0.798035, -0.547298 )
 polygons = [ PoolIntArray( 0, 1, 2, 3 ) ]
 
-[sub_resource type="TileSet" id=1]
+[sub_resource type="TileSet" id=3]
 0/name = "Space"
 0/texture = ExtResource( 1 )
 0/tex_offset = Vector2( 0, 0 )
@@ -23,7 +24,7 @@ polygons = [ PoolIntArray( 0, 1, 2, 3 ) ]
 0/tile_mode = 0
 0/occluder_offset = Vector2( 0, 0 )
 0/navigation_offset = Vector2( 0, 0 )
-0/navigation = SubResource( 2 )
+0/navigation = SubResource( 1 )
 0/shape_offset = Vector2( 0, 0 )
 0/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
 0/shape_one_way = false
@@ -38,7 +39,7 @@ polygons = [ PoolIntArray( 0, 1, 2, 3 ) ]
 1/tile_mode = 0
 1/occluder_offset = Vector2( 0, 0 )
 1/navigation_offset = Vector2( 0, 0 )
-1/navigation = SubResource( 3 )
+1/navigation = SubResource( 2 )
 1/shape_offset = Vector2( 0, 0 )
 1/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
 1/shape_one_way = false
@@ -51,7 +52,7 @@ script = ExtResource( 5 )
 searchRadius = 5
 
 [node name="TileMap" type="TileMap" parent="."]
-tile_set = SubResource( 1 )
+tile_set = SubResource( 3 )
 cell_size = Vector2( 32, 32 )
 cell_quadrant_size = 32
 cell_half_offset = 0
@@ -64,6 +65,7 @@ width = 2.0
 default_color = Color( 1, 1, 1, 1 )
 
 [node name="Ship" type="Sprite" parent="."]
+position = Vector2( -1, 0 )
 scale = Vector2( 0.3, 0.3 )
 z_index = 2
 texture = ExtResource( 4 )
@@ -120,3 +122,5 @@ valign = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="Pause_Menu" parent="." instance=ExtResource( 6 )]

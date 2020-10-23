@@ -77,6 +77,7 @@ func _searchCells():
 	potentialStars = []
 	var xRange = [max(0, coordinates_curr.x - searchRadius), min(cMap.x, coordinates_curr.x + searchRadius)]
 	var yRange = [max(0, coordinates_curr.y - searchRadius), min(cMap.y, coordinates_curr.y + searchRadius)]
+	
 	for i in range(xRange[0],xRange[1]):
 		for j in range(yRange[0],yRange[1]):
 			if tile.get_cell(i,j) == tile.TILES.Star:

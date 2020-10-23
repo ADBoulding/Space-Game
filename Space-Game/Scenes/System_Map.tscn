@@ -1,8 +1,10 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://scripts/galaxy/SolarSystem.gd" type="Script" id=1]
 [ext_resource path="res://Fonts/font.tres" type="DynamicFont" id=2]
 [ext_resource path="res://Scenes/Planet_Gen/4MUGBG.jpg" type="Texture" id=3]
+[ext_resource path="res://Scenes/pause_screen/Pause.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Scenes/systemCamera.gd" type="Script" id=5]
 
 [sub_resource type="PanoramaSky" id=1]
 radiance_size = 4
@@ -28,15 +30,19 @@ environment = SubResource( 2 )
 [node name="Control" type="Control" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_top = 323.0
+margin_right = -526.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Galaxy_Map" type="Button" parent="Control"]
-margin_left = 18.2599
-margin_top = 320.018
-margin_right = 110.26
-margin_bottom = 340.018
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_left = 13.2142
+margin_top = -29.9107
+margin_right = 105.214
+margin_bottom = -9.91071
 action_mode = 0
 text = "Galaxy Map"
 __meta__ = {
@@ -67,14 +73,23 @@ __meta__ = {
 
 [node name="Label" type="Label" parent="Control"]
 margin_left = 129.0
-margin_top = 299.0
+margin_top = 307.0
 margin_right = 270.0
-margin_bottom = 344.0
+margin_bottom = 352.0
 custom_fonts/font = ExtResource( 2 )
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Camera" type="Camera" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 22.3305, 0, 38.8886 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 25, 0, 40 )
+current = true
 fov = 50.8
+script = ExtResource( 5 )
 
 [node name="CSGMesh" type="CSGMesh" parent="."]
 mesh = SubResource( 3 )
+
+[node name="Pause_Menu" parent="." instance=ExtResource( 4 )]
+[connection signal="finishedGen" from="." to="Camera" method="_on_System_finishedGen"]

@@ -18,7 +18,8 @@ var planetReference = {
 		"octaves" : [5, 9],
 		"period" : [120.0,160.0],
 		"persistence" : [0.6,1.0],
-		"lacunarity" : [1.5,2.5]
+		"lacunarity" : [1.5,2.5],
+		"hasAtmosphere" : true
 	},
 	"waterWorld" : {
 		"colour" : [Color(0.33,0.45,0.53,1),Color(0.88,0.91,0.67,1),Color(0.58,0.88,0.51,1)],
@@ -27,7 +28,8 @@ var planetReference = {
 		"octaves" : [4, 9],
 		"period" : [0.1,160.0],
 		"persistence" : [0.3,0.7],
-		"lacunarity" : [1.5,2.5]
+		"lacunarity" : [1.5,2.5],
+		"hasAtmosphere" : true
 	},
 	"rocky" : {
 		"colour" : [Color(0.69,0.69,0.69,1),Color(0.58,0.58,0.58,1),Color(0.34,0.34,0.34,1)],
@@ -36,7 +38,8 @@ var planetReference = {
 		"octaves" : [8, 9],
 		"period" : [120.0,160.0],
 		"persistence" : [0.6,1.0],
-		"lacunarity" : [3.0,4.0]
+		"lacunarity" : [3.0,4.0],
+		"hasAtmosphere" : false
 	}
 }
 
@@ -52,7 +55,7 @@ var planetNum = 0
 var systemNum = 0
 
 var mapSize = 101
-var starChance = 7.0
+var starChance = 5.0
 
 func randomizeRNG():
 	rng.randomize()
@@ -68,12 +71,7 @@ func addSystemID(_ID : Vector2):
 		systemDictionary[x][y] = system
 
 func init_system():
-	planetNum = 0
-	systemNum = 0
-	systemContainer.clear()
-	coordContainer.clear()
-	systemDictionary.clear()
-	systemMapArray.clear()
+	resetSystem()
 	buildMapArray()
 	for coord in coordContainer:
 		addSystemID(coord)
@@ -81,12 +79,13 @@ func init_system():
 	print("planets: " + str(planetNum))
 	print("systems: " + str(systemNum))
 			
-func _ready():
-	pass
-
 func resetSystem():
+	planetNum = 0
+	systemNum = 0
 	systemContainer.clear()
-	print("CLEARING SYSTEM")
+	coordContainer.clear()
+	systemDictionary.clear()
+	systemMapArray.clear()
 	
 func buildMapArray():
 	coordContainer.clear()
@@ -143,15 +142,24 @@ class SolarSystem:
 		var _pe = _planet["persistence"]
 		var _l = _planet["lacunarity"]
 		
-		# Use RNG to determine the planet parameters
-		var radius = Global.rng.randf_range(_r[0],_r[1])
-		var nSeed = Global.rng.randi_range(1,100)
-		var octaves = Global.rng.randi_range(_o[0],_o[1])
-		var period = Global.rng.randf_range(_pd[0],_pd[1])
-		var persistence = Global.rng.randf_range(_pe[0],_pe[1])
-		var lacunarity = Global.rng.randf_range(_l[0],_l[1])
+		# Create dictionary to pass to planetGen
+		var planetData = {
+			"planetType" : planetType,
+			"id" : planetNum,
+			"localID" : _localID,
+			"colours" : _c,
+			"colourThresholds" : _cT,
+			"hasAtmosphere" : _planet["hasAtmosphere"],
+			"rotation" : Global.rng.randf_range(-0.2,0.2),
+			"radius" : Global.rng.randf_range(_r[0],_r[1]),
+			"seed" : Global.rng.randi_range(1,100),
+			"octaves" : Global.rng.randi_range(_o[0],_o[1]),
+			"period" : Global.rng.randf_range(_pd[0],_pd[1]),
+			"persistence" : Global.rng.randf_range(_pe[0],_pe[1]),
+			"lacunarity" : Global.rng.randf_range(_l[0],_l[1])
+		}
 		
-		var p = Planet.new(planetNum,_localID,radius,_c,_cT,nSeed,octaves,period,persistence,lacunarity)
+		var p = Planet.new(planetData)
 		planets.append(p)
 		#print("generated a [" + planetType + "] world")
 		Global.planetNum += 1
@@ -205,23 +213,25 @@ class SolarSystem:
 		var c2t = 0.516
 		var c3t = 0.634
 
-		func _init(_id := -1, _localID := -1, _radius := 1.0, _colours := [], _colourThresholds := [], _seed := 1, _octaves := 5, _period := 64.0, _persistence := 0.5, _lacunarity := 2.0):
-			if _id == -1:
+		func _init(planetDictionary):
+			var _p = planetDictionary
+			if _p["id"] == -1:
 				id = Global.planetNum
 			else:
-				id = _id
-			locID = _localID
-			radius = _radius
-			colour1 = _colours[0]
-			colour2 = _colours[1]
-			colour3 = _colours[2]
-			c1t = _colourThresholds[0]
-			c2t = _colourThresholds[1]
-			c3t = _colourThresholds[2]
-			nSeed = _seed
-			octaves = _octaves
-			period = _period
-			persistence = _persistence
-			lacunarity = _lacunarity
-			
-			rotation = Global.rng.randf_range(0.0,1.0)
+				id = _p["id"]
+			locID = _p["localID"]
+			planetType = _p["planetType"]
+			hasAtmosphere = _p["hasAtmosphere"]
+			radius = _p["radius"]
+			rotation = _p["rotation"]
+			colour1 = _p["colours"][0]
+			colour2 = _p["colours"][1]
+			colour3 = _p["colours"][2]
+			c1t = _p["colourThresholds"][0]
+			c2t = _p["colourThresholds"][1]
+			c3t = _p["colourThresholds"][2]
+			nSeed = _p["seed"]
+			octaves = _p["octaves"]
+			period = _p["period"]
+			persistence = _p["persistence"]
+			lacunarity = _p["lacunarity"]

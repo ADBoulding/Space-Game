@@ -1,5 +1,6 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=13 format=2]
 
+[ext_resource path="res://Scenes/Planet_Gen/cloud_Shader.shader" type="Shader" id=1]
 [ext_resource path="res://Scenes/Planet_Gen/Planet_Shader.shader" type="Shader" id=2]
 
 [sub_resource type="SphereMesh" id=1]
@@ -31,6 +32,11 @@ shader_param/Base_Albedo = SubResource( 3 )
 [sub_resource type="GDScript" id=5]
 script/source = "extends MeshInstance
 
+onready var collider : CollisionShape = $Area/CollisionShape
+onready var clouds : MeshInstance = $Clouds
+
+signal clickedOn
+
 export var SystemID: Vector2
 export var ID: int
 export var LocalID: int
@@ -50,6 +56,8 @@ var octaves = 1
 var period = 64.0
 var persistence = 0.5
 var lacunarity = 2.0
+
+var dir
 
 export(NoiseTexture) var Albedo = NoiseTexture.new()
 
@@ -76,7 +84,9 @@ func _load_planet():
 		noise.period = planet.period
 		noise.persistence = planet.persistence
 		noise.lacunarity = planet.lacunarity
-		
+		collider.shape.radius = planet.radius
+		clouds.visible = planet.hasAtmosphere
+		dir = sqrt(planet.rotation * planet.rotation)/planet.rotation
 		_draw_planet()
 		
 	else:
@@ -109,9 +119,43 @@ func _ready()->void:
 	_load_planet()
 
 func _process(delta):
-	rotate_y(delta * planet.rotation)
-	pass
+	rotate_y(delta * planet.rotation/planet.radius)
+	clouds.rotate_y(delta * -planet.rotation/planet.radius/5)
+
+func _on_Area_input_event(camera, event, click_position, click_normal, shape_idx):
+	if event is InputEventMouseButton:
+		if event.button_index == BUTTON_LEFT and event.pressed == true:
+			emit_signal(\"clickedOn\")
 "
+
+[sub_resource type="SphereMesh" id=7]
+resource_local_to_scene = true
+radius = 1.02
+height = 2.04
+
+[sub_resource type="OpenSimplexNoise" id=9]
+seed = 6
+octaves = 9
+period = 113.0
+persistence = 0.825
+lacunarity = 2.62
+
+[sub_resource type="NoiseTexture" id=10]
+width = 400
+height = 400
+seamless = true
+noise = SubResource( 9 )
+
+[sub_resource type="ShaderMaterial" id=8]
+resource_local_to_scene = true
+shader = ExtResource( 1 )
+shader_param/colour1 = Color( 1, 1, 1, 0 )
+shader_param/colour2 = Color( 1, 1, 1, 1 )
+shader_param/cloudThreshold = 0.46
+shader_param/Base_Albedo = SubResource( 10 )
+
+[sub_resource type="SphereShape" id=6]
+radius = 0.0
 
 [node name="MeshInstance" type="MeshInstance" groups=[
 "planetInstance",
@@ -121,3 +165,13 @@ mesh = SubResource( 1 )
 material/0 = SubResource( 4 )
 script = SubResource( 5 )
 colour1 = Color( 0.00392157, 0.0235294, 0.0352941, 1 )
+
+[node name="Clouds" type="MeshInstance" parent="."]
+mesh = SubResource( 7 )
+material/0 = SubResource( 8 )
+
+[node name="Area" type="Area" parent="."]
+
+[node name="CollisionShape" type="CollisionShape" parent="Area"]
+shape = SubResource( 6 )
+[connection signal="input_event" from="Area" to="." method="_on_Area_input_event"]
