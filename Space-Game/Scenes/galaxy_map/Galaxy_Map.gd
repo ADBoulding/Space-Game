@@ -4,8 +4,8 @@ onready var line_2d : Line2D = $Line2D
 onready var ship : Sprite = $Ship
 onready var tile : TileMap = $TileMap
 onready var cam : Camera2D = $Camera2D
-onready var travelB : Button = $CanvasLayer/Control/Travel
-onready var systemB : Button = $CanvasLayer/Control/System
+onready var tPanel : Control = $CanvasLayer/TPanel
+onready var tPanelSlave : Sprite = $tPanelSlave
 onready var sLabel : Label = $CanvasLayer/Label
 
 var isInSystem := false
@@ -25,8 +25,9 @@ var lNodes = []
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	randomize()
-	travelB.connect("button_down", self, "_travelSystem")
-	systemB.connect("button_down", self, "_openSystemMap")
+	$CanvasLayer/TPanel/Travel.connect("button_down", self, "_travelSystem")
+	$CanvasLayer/TPanel/System.connect("button_down", self, "_openSystemMap")
+	$CanvasLayer/TPanel/Back.connect("button_down", cam, "_unFocus")
 	searchRadius = 7
 	var shipPos
 	if Global.coordContainer.size() == 0:
@@ -36,8 +37,6 @@ func _ready():
 		coordinates_curr = Global.currentSystem
 		coordinates_dest = coordinates_curr
 		shipPos = _centerCoords(tile.map_to_world(coordinates_curr))
-		travelB.show()
-		systemB.show()
 		
 	init_galaxy(shipPos)
 	
@@ -119,7 +118,6 @@ func _travelSystem():
 		var tVec = tile.map_to_world(coordinates_dest)
 		tVec = _centerCoords(tVec)
 		_move_and_set_ship(tVec)
-		systemB.show()
 		
 func _openSystemMap():
 	if coordinates_curr in Global.coordContainer:
@@ -140,10 +138,18 @@ func _unhandled_input(event: InputEvent):
 	
 	if cellType == tile.TILES.Star:
 		if 	viewPos in potentialStars:
-			print("SHOULD BE VIS")
-			coordinates_dest = viewPos
-			if coordinates_curr != coordinates_dest:
-				travelB.visible = true
+			_updateSystemPanel(viewPos)
+
+func _updateSystemPanel(dest : Vector2):
+	tPanel.hide()
+	coordinates_dest = dest
+	var _x = str(dest.x)
+	var _y = str(dest.y)
+	if Global.systemDictionary[_x][_y].hasData:
+		$CanvasLayer/TPanel/PlanetNum.text = str("Planets : ",Global.systemDictionary[str(dest.x)][str(dest.y)].planetNum)
+	else:	
+		$CanvasLayer/TPanel/PlanetNum.text = str("No Data")
+	cam._moveToLocation(_centerCoords(tile.map_to_world(dest)))
 	
 func _process(delta: float) -> void:
 	var rawMouse = get_viewport().get_mouse_position()

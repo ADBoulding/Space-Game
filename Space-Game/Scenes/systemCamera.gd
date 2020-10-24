@@ -14,6 +14,8 @@ enum STATE {
 	UNFOCUSED
 }
 
+onready var planetInfo = get_parent().get_node("planetInfo")
+
 var cameraState 
 
 func _ready():
@@ -24,6 +26,7 @@ func _getPlanets():
 	for node in get_parent().pNodes:
 		var _position = node.translation
 		_position.z = node.mesh.radius + 2
+		_position.x += .75
 		camPosition.append(_position)
 		
 func _input(event):
@@ -52,15 +55,16 @@ func _input(event):
 		if event.is_action_pressed("ui_left"):
 			if focusedOn > 0:
 				focusedOn -= 1
-				_moveToPosition(camPosition[focusedOn])
+				_focus(focusedOn)
 				print(focusedOn)
 		elif event.is_action_pressed("ui_right"):
 			if focusedOn < totalPlanets - 1:
-					focusedOn += 1
-					_moveToPosition(camPosition[focusedOn])
-					print(focusedOn)
+				focusedOn += 1
+				_focus(focusedOn)
+				print(focusedOn)
 		elif event.is_action_pressed("ui_down"):
 			cameraState = STATE.UNFOCUSED
+			planetInfo.hide()
 			_moveToPosition(normalPosition)
 
 func _process(delta):
@@ -79,7 +83,9 @@ func _focus(id):
 	cameraState = STATE.FOCUSED
 	_moveToPosition(camPosition[id])
 	focusedOn = id
-
+	if !planetInfo.visible:
+		planetInfo.show()
+	planetInfo._changePlanetInfo(id)
 
 func _on_System_finishedGen():
 	_getPlanets()

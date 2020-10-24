@@ -18,16 +18,15 @@ var camLimits
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	galaxyB.connect("pressed", self, "_returnToGalaxy")
-#	prevButton.connect("pressed", self, "prevSystem")
-#	nextButton.connect("pressed", self, "nextSystem")
 	SystemID = Global.currentSystem
+	var _x = str(SystemID.x)
+	var _y = str(SystemID.y)
+	system = Global.systemDictionary[_x][_y]
+	Global.systemDictionary[str(SystemID.x)][str(SystemID.y)].hasData = true
 	genPlanets()
 	emit_signal("finishedGen")
 		
 func genPlanets():
-	var _x = str(SystemID.x)
-	var _y = str(SystemID.y)
-	system = Global.systemDictionary[_x][_y]
 	updateScene()
 	pNodes = []
 	for _p in system.planets:

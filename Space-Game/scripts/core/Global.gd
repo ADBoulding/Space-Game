@@ -12,16 +12,18 @@ enum PLANETTYPE {
 
 var planetReference = {
 	"earthLike" : {
+		"fullName" : "Earthlike World",
 		"colour" : [Color(0.33,0.45,0.53,1),Color(0.88,0.91,0.67,1),Color(0.58,0.88,0.51,1)],
-		"thresholds" : [0.428,0.516,0.634],
+		"thresholds" : [0.45,0.50,0.55],
 		"radius" : [0.8, 1.5],
 		"octaves" : [5, 9],
-		"period" : [120.0,160.0],
-		"persistence" : [0.6,1.0],
-		"lacunarity" : [1.5,2.5],
+		"period" : [50.0,160.0],
+		"persistence" : [0.4,1.0],
+		"lacunarity" : [2.5,3.5],
 		"hasAtmosphere" : true
 	},
 	"waterWorld" : {
+		"fullName" : "Water World",
 		"colour" : [Color(0.33,0.45,0.53,1),Color(0.88,0.91,0.67,1),Color(0.58,0.88,0.51,1)],
 		"thresholds" :[0.7,0.8,0.9],
 		"radius" : [1.0, 1.2],
@@ -32,6 +34,7 @@ var planetReference = {
 		"hasAtmosphere" : true
 	},
 	"rocky" : {
+		"fullName" : "Rocky World",
 		"colour" : [Color(0.69,0.69,0.69,1),Color(0.58,0.58,0.58,1),Color(0.34,0.34,0.34,1)],
 		"thresholds" : [0.45,0.5,0.55],
 		"radius" : [0.4, 0.8],
@@ -115,6 +118,7 @@ class SolarSystem:
 	var planets = []
 	var planetNum: int
 	var size setget ,size_get
+	var hasData = false
 	
 	# Randomization and addition of planets	
 	func add_new_planet(_localID):
@@ -191,6 +195,7 @@ class SolarSystem:
 		var planetType
 		var hasAtmosphere
 		var rotation
+		var settlement : bool
 
 		#storage for noise parameters
 		var nSeed
