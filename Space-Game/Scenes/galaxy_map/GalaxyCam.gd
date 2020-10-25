@@ -1,20 +1,28 @@
 extends Camera2D
 
+signal CanUpdate
+
 export var speed = 20.0
 export var mSpeed = 10.0
-export var zoomAmount = 5
+export var zoomAmount = [0.5,1,1.5]
+var _zoom_level = 0
 export (float, 0.0, 5.0) var buff = 1.0 
 var limits 
 
+var firstTime = true
+
+var zooming
 var moving
 var focused
 
 var destination : Vector2
 
-onready var tPanel = get_parent().get_node("CanvasLayer/TPanel")
+onready var tPanel = get_parent().get_node("tPaneSlave/TPanel")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	_zoom_level = 1
+	zooming = true
 	focused = false
 	moving = false
 
@@ -30,7 +38,7 @@ func _unFocus():
 func _process(delta):
 	var vecs
 	if moving:
-		if buffer(position, destination):
+		if buffer(position, destination, buff):
 			print("howdydoda")
 			moving = false
 			tPanel.rect_position = Vector2(330,190)
@@ -39,8 +47,20 @@ func _process(delta):
 		vecs = Vector2(lerp(position.x,destination.x,mSpeed * delta),lerp(position.y,destination.y,mSpeed * delta))
 		position = correctVector(vecs, limits)
 	
+	if zooming:
+		var _dzoom = zoomAmount[_zoom_level]
+		if buffer(zoom, Vector2(_dzoom,_dzoom), 0.05):
+			zooming = false
+			if firstTime:
+				firstTime = false
+				emit_signal("CanUpdate")
+			return
+		var _z = Vector2(lerp(zoom.x,_dzoom, delta), lerp(zoom.y,_dzoom, delta))
+		zoom = _z
+	
 	if focused:
 		return
+			
 	var input_vector = Vector2.ZERO
 	input_vector.x = Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
 	input_vector.y = Input.get_action_strength("ui_down") - Input.get_action_strength("ui_up")
@@ -48,6 +68,21 @@ func _process(delta):
 	if input_vector != Vector2.ZERO:
 		if checkLimits(vecs, limits):
 			position = correctVector(vecs, limits)
+
+func _unhandled_input(event):
+	if event is InputEventMouseButton:
+		if event.is_pressed():
+			#zoom in
+			if event.button_index == BUTTON_WHEEL_UP:
+				upZoom(Vector2(-0.1,-0.1))
+			if event.button_index == BUTTON_WHEEL_DOWN:
+				upZoom(Vector2(0.1,0.1))
+			 
+func upZoom(dest : Vector2):
+	if zoom + dest > Vector2(3,3) || zoom + dest < Vector2(0.5,0.5) || zooming:
+		return
+	else:
+		zoom += dest
 
 func checkLimits(vector, rect):
 	if vector.x <= rect.end.x and vector.x >= rect.position.x:
@@ -68,25 +103,19 @@ func correctVector(vector:Vector2, rect):
 		_nVec.y = rect.end.y
 	return _nVec
 
-func buffer(at : Vector2, dest : Vector2):
-	if dest.x-at.x < buff and dest.x-at.x > -buff:
-		if dest.y-at.y < buff and dest.y-at.y > -buff:
+func buffer(at : Vector2, dest : Vector2, buffer: float):
+	if dest.x-at.x < buffer and dest.x-at.x > -buffer:
+		if dest.y-at.y < buffer and dest.y-at.y > -buffer:
 			return true
 	return false
 
-func _set_limits():
-	limit_left = 0
-	limit_right = 0
-	limit_bottom = 0
-	limit_top = 0	
-		
-	var tilemap = get_parent().get_node("TileMap")
-	if tilemap is TileMap:
-		var limit = tilemap.get_used_rect()
-		print(limit)
-		position.x = limit.end.x * tilemap.cell_size.x / 2
-		position.y = limit.end.y * tilemap.cell_size.y / 2
-		limit_right = max(limit.end.x * tilemap.cell_size.x, limit_right)
-		limit_bottom = max(limit.end.y * tilemap.cell_size.y, limit_bottom)
-	limits = Rect2(Vector2(limit_left + Global.windowSize.x/2, limit_top + Global.windowSize.y/2),Vector2(limit_right - Global.windowSize.x, limit_bottom - Global.windowSize.y))
-	print(Vector2(limit_left,limit_top),Vector2(limit_right,limit_bottom))
+func _set_limits(cluster : Vector2):
+	var rect = Vector2(3*Galaxy.cellSize*Galaxy.clusterSize,3*Galaxy.cellSize*Galaxy.clusterSize)
+	var _offset = rect / 2
+	var camOffset = Vector2(Global.windowSize.x,Global.windowSize.y)
+	var location = cluster * Galaxy.cellSize * Galaxy.clusterSize
+	
+	print(rect,_offset,camOffset,location)
+	
+	limits = Rect2(location-_offset+camOffset/2,rect-camOffset)
+	print(limits.position,limits.end)

@@ -1,6 +1,6 @@
 extends Control
 
-var system : Global.SolarSystem
+var system : Galaxy.SolarSystem
 onready var title : Label = $TextureRect/Title
 onready var planetType : Label = $TextureRect/Planet_Type
 
@@ -8,11 +8,13 @@ func _ready():
 	self.hide()
 
 func _changePlanetInfo(ID: int):
-	var planet : Global.SolarSystem.Planet = system.planets[ID]
+	var planet : Galaxy.Planet = system.planets[ID]
 	var _title
 	if planet.name == "":
 		_title = "TEMPORARY NAME"
-	var _type = Global.planetReference[planet.planetType]["fullName"]
+	else:
+		_title = planet.name
+	var _type = Galaxy.planetType[planet.planetType]["fullName"]
 	title.text = _title
 	planetType.text = _type
 	

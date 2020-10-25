@@ -157,5 +157,5 @@ __meta__ = {
 }
 
 [node name="Pause_Menu" parent="." instance=ExtResource( 4 )]
-[connection signal="finishedGen" from="." to="Camera" method="_on_System_finishedGen"]
 [connection signal="finishedGen" from="." to="planetInfo" method="_on_System_finishedGen"]
+[connection signal="finishedGen" from="." to="Camera" method="_on_System_finishedGen"]

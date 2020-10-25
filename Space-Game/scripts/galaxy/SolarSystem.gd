@@ -1,7 +1,7 @@
 extends Spatial
 
 export var SystemID : Vector2
-var system: Global.SolarSystem
+var system: Galaxy.SolarSystem
 
 signal finishedGen
 
@@ -19,10 +19,8 @@ var camLimits
 func _ready():
 	galaxyB.connect("pressed", self, "_returnToGalaxy")
 	SystemID = Global.currentSystem
-	var _x = str(SystemID.x)
-	var _y = str(SystemID.y)
-	system = Global.systemDictionary[_x][_y]
-	Global.systemDictionary[str(SystemID.x)][str(SystemID.y)].hasData = true
+	system = Global.currSys
+	Global.clusterContainer[Global.currentCluster].systems[Global.currentSystem].hasData = true
 	genPlanets()
 	emit_signal("finishedGen")
 		

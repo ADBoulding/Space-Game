@@ -2,5 +2,9 @@ class_name Ship
 
 var jumpDistance
 
-func _init(JumpDistance := 5):
+var integrity
+
+func _init(JumpDistance := 5, Integrity := 100):
 	jumpDistance = JumpDistance
+	integrity = Integrity
+	

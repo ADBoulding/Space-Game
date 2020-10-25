@@ -1,0 +1,238 @@
+extends Node
+
+var cellSize = 32 			# 32 pixels per cell
+var clusterSize = 32 		# 32 cells in a cluster
+var systemChance = 0.07 	# Chance of system occuring
+
+enum PLANETTYPE {
+	earthLike,
+	waterWorld,
+	rocky
+}
+
+var planetType = {
+	PLANETTYPE.earthLike : {
+		"fullName" : "Earthlike World",
+		"colour" : [Color(0.33,0.45,0.53,1),Color(0.88,0.91,0.67,1),Color(0.58,0.88,0.51,1)],
+		"thresholds" : [0.45,0.50,0.55],
+		"radius" : [0.8, 1.5],
+		"octaves" : [5, 9],
+		"period" : [50.0,160.0],
+		"persistence" : [0.4,1.0],
+		"lacunarity" : [2.5,3.5],
+		"hasAtmosphere" : true
+	},
+	PLANETTYPE.waterWorld : {
+		"fullName" : "Water World",
+		"colour" : [Color(0.33,0.45,0.53,1),Color(0.88,0.91,0.67,1),Color(0.58,0.88,0.51,1)],
+		"thresholds" :[0.7,0.8,0.9],
+		"radius" : [1.0, 1.2],
+		"octaves" : [4, 9],
+		"period" : [0.1,160.0],
+		"persistence" : [0.3,0.7],
+		"lacunarity" : [1.5,2.5],
+		"hasAtmosphere" : true
+	},
+	PLANETTYPE.rocky : {
+		"fullName" : "Rocky World",
+		"colour" : [Color(0.69,0.69,0.69,1),Color(0.58,0.58,0.58,1),Color(0.34,0.34,0.34,1)],
+		"thresholds" : [0.45,0.5,0.55],
+		"radius" : [0.4, 0.8],
+		"octaves" : [8, 9],
+		"period" : [120.0,160.0],
+		"persistence" : [0.6,1.0],
+		"lacunarity" : [3.0,4.0],
+		"hasAtmosphere" : false
+	}
+}
+
+# Cluster of Stars [Acts as Chunks]
+class Cluster:
+	var id : Vector2		# Location Placeholder
+	var position : Vector2	# Position of the Chunk
+	var clusterName			# Name of Cluster
+	var systems = {}		# Systems Container
+	var systemNum			# Number of Systems
+	var systemNames = []	# System Name Container
+	
+	# Takes optional systems, location, and name, if not, generates
+	func _init(ID := Vector2.ZERO, Cluster_Name := "", System_Number = -1):
+		var clusterSize = Galaxy.clusterSize		# Takes clustersize from the parent container
+		var systemChance = Galaxy.systemChance		# Ditto
+		id = ID										# Takes ID
+		var position = id * Vector2(32,32) 			# Converts the cluster ID to world coordinates
+		if Cluster_Name == "":						# If Cluster is empty, generate a cluster name, else, takes name
+			_nameCluster()
+		else:
+			clusterName = Cluster_Name
+		match System_Number:		# If predefined systems, pass, else, randomly calculate range
+			-1:
+				var avg = int(float(clusterSize)*float(clusterSize) * systemChance)
+				Global.randomizeRNG()
+				systemNum = Global.rng.randi_range(avg - 15,avg + 15)
+			_:
+				systemNum = System_Number
+		_populateSystem(systemNum)
+		_nameSystems()
+	
+	func _populateSystem(number : int):
+		Global.randomizeRNG()
+		for i in number:
+			Global.systemNum += 1
+			if id == Vector2.ZERO and i == 0:
+				var tVec = Vector2(Galaxy.clusterSize/2,Galaxy.clusterSize/2)
+				systems[tVec] = SolarSystem.new(i)
+			else:
+				var _t = false
+				var x
+				var y
+				while _t == false:
+					x = Global.rng.randi_range(0,Galaxy.clusterSize - 1)
+					y = Global.rng.randi_range(0,Galaxy.clusterSize - 1)
+					if !systems.has(Vector2(x,y)):
+						systems[Vector2(x,y)] = SolarSystem.new(i)
+						_t = true
+	
+	func _nameSystems():
+		for system in systems:
+			var _t = false
+			while !_t:
+				var _sys = NameGenerator.randomSystem(clusterName)
+				if !_sys in systemNames:
+					systems[system].name = _sys
+					_t = true
+
+	func _nameCluster():
+		clusterName = NameGenerator.randomCluster()
+
+# Solar System Class [Rests Within Chunks]
+class SolarSystem:
+	
+	var name					# Name of the system
+	var id						# ID of the system in Vec2
+	var planets = []			# Planet storage
+	var planetNum: int			# Number of planets...
+	var size setget ,size_get	# Allows for code to reference this
+	var hasData = false			# Whether the player has data (visited, been there, etc.)
+	
+	# Randomization and addition of planets	
+	func add_new_planet(_localID):
+		
+		Global.randomizeRNG()				# Randomizes the RNG
+		var planetNum = Global.planetNum	# Obtains the total amount of planets
+		var _pType	 					# Defines a variable to hold the PlanetType
+		var _name = str(self.name, " ", _localID)
+		
+		# Randomize the planet type
+		var typeChance = Global.rng.randf_range(0.0,1.0)
+		if typeChance < 0.1:
+			_pType = PLANETTYPE.earthLike
+		elif typeChance < 0.3:
+			_pType = PLANETTYPE.waterWorld
+		else:
+			_pType = PLANETTYPE.rocky
+		
+		# Get ranges from dictionary
+		var _planet = Galaxy.planetType[_pType]
+		var _r = _planet["radius"]
+		var _c = _planet["colour"]
+		var _cT = _planet["thresholds"]
+		var _o = _planet["octaves"]
+		var _pd = _planet["period"]
+		var _pe = _planet["persistence"]
+		var _l = _planet["lacunarity"]
+		
+		# Create dictionary to pass to planetGen
+		var planetData = {
+			"planetType" : _pType,
+			"name" : _name,
+			"id" : planetNum,
+			"localID" : _localID,
+			"colours" : _c,
+			"colourThresholds" : _cT,
+			"hasAtmosphere" : _planet["hasAtmosphere"],
+			"rotation" : Global.rng.randf_range(-0.2,0.2),
+			"radius" : Global.rng.randf_range(_r[0],_r[1]),
+			"seed" : Global.rng.randi_range(1,100),
+			"octaves" : Global.rng.randi_range(_o[0],_o[1]),
+			"period" : Global.rng.randf_range(_pd[0],_pd[1]),
+			"persistence" : Global.rng.randf_range(_pe[0],_pe[1]),
+			"lacunarity" : Global.rng.randf_range(_l[0],_l[1])
+		}
+		
+		var p = Planet.new(planetData)		# Constructs new planet using data
+		planets.append(p)					# Appends the planet to the planet list
+		Global.planetNum += 1				# Adds to the global planet number
+
+	# Initializes the System
+	func _init(_ID := -1, _planetNum := -1, _name := false):
+		id = _ID
+		if _planetNum == -1:
+			Global.randomizeRNG()
+			planetNum = Global.rng.randi_range(1,8)
+		else:
+			planetNum = _planetNum
+		if _name:
+			name = NameGenerator.randomSystem()
+		for i in planetNum:
+			add_new_planet(i)
+		
+	func size_get():
+		return planets.size()
+		
+class Planet:
+	# Storage for id
+	var name = ""
+	var id = 0
+	var locID = 0
+	
+	# flag for discovered planet
+	var discovered = false
+
+	# flag for planet type
+	var planetType
+	var hasAtmosphere
+	var rotation
+	var settlement : bool
+
+	#storage for noise parameters
+	var nSeed
+	var octaves
+	var period
+	var persistence
+	var lacunarity
+	var radius
+
+	# Storage for colour
+	var colour1 = Color(0.33,0.45,0.53,1)
+	var colour2 = Color(0.88,0.91,0.67,1)
+	var colour3 = Color(0.58,0.88,0.51,1)
+
+	# Colour Thresholds
+	var c1t = 0.428
+	var c2t = 0.516
+	var c3t = 0.634
+
+	func _init(planetDictionary):
+		var _p = planetDictionary
+		if _p["id"] == -1:
+			id = Global.planetNum
+		else:
+			id = _p["id"]
+		locID = _p["localID"]
+		name = _p["name"]
+		planetType = _p["planetType"]
+		hasAtmosphere = _p["hasAtmosphere"]
+		radius = _p["radius"]
+		rotation = _p["rotation"]
+		colour1 = _p["colours"][0]
+		colour2 = _p["colours"][1]
+		colour3 = _p["colours"][2]
+		c1t = _p["colourThresholds"][0]
+		c2t = _p["colourThresholds"][1]
+		c3t = _p["colourThresholds"][2]
+		nSeed = _p["seed"]
+		octaves = _p["octaves"]
+		period = _p["period"]
+		persistence = _p["persistence"]
+		lacunarity = _p["lacunarity"]

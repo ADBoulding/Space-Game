@@ -1,90 +1,116 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=8 format=2]
 
-[ext_resource path="res://Scenes/galaxy_map/space_Tile.png" type="Texture" id=1]
-[ext_resource path="res://Scenes/galaxy_map/randomStars.gd" type="Script" id=2]
 [ext_resource path="res://Scenes/galaxy_map/GalaxyCam.gd" type="Script" id=3]
 [ext_resource path="res://assets/ship/1_0000_Ship.png" type="Texture" id=4]
 [ext_resource path="res://Scenes/galaxy_map/Galaxy_Map.gd" type="Script" id=5]
 [ext_resource path="res://Scenes/pause_screen/Pause.tscn" type="PackedScene" id=6]
 [ext_resource path="res://assets/Text/HeartbitXX.ttf" type="DynamicFontData" id=7]
 
-[sub_resource type="NavigationPolygon" id=1]
-vertices = PoolVector2Array( 32.7294, 32.77, -1.23777, 32.77, -1.23777, -0.99437, 32.7294, -0.99437 )
-polygons = [ PoolIntArray( 0, 1, 2, 3 ) ]
-
-[sub_resource type="NavigationPolygon" id=2]
-vertices = PoolVector2Array( -0.798035, 32.7102, 32.7711, 32.7102, 32.7711, -0.547298, -0.798035, -0.547298 )
-polygons = [ PoolIntArray( 0, 1, 2, 3 ) ]
-
-[sub_resource type="TileSet" id=3]
-0/name = "Space"
-0/texture = ExtResource( 1 )
-0/tex_offset = Vector2( 0, 0 )
-0/modulate = Color( 1, 1, 1, 1 )
-0/region = Rect2( 0, 0, 32, 32 )
-0/tile_mode = 0
-0/occluder_offset = Vector2( 0, 0 )
-0/navigation_offset = Vector2( 0, 0 )
-0/navigation = SubResource( 1 )
-0/shape_offset = Vector2( 0, 0 )
-0/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
-0/shape_one_way = false
-0/shape_one_way_margin = 0.0
-0/shapes = [  ]
-0/z_index = 0
-1/name = "Star"
-1/texture = ExtResource( 1 )
-1/tex_offset = Vector2( 0, 0 )
-1/modulate = Color( 1, 1, 1, 1 )
-1/region = Rect2( 32, 0, 32, 32 )
-1/tile_mode = 0
-1/occluder_offset = Vector2( 0, 0 )
-1/navigation_offset = Vector2( 0, 0 )
-1/navigation = SubResource( 2 )
-1/shape_offset = Vector2( 0, 0 )
-1/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
-1/shape_one_way = false
-1/shape_one_way_margin = 0.0
-1/shapes = [  ]
-1/z_index = 0
-
 [sub_resource type="DynamicFont" id=4]
 size = 18
 outline_color = Color( 0.2, 0.2, 0.2, 1 )
 font_data = ExtResource( 7 )
 
+[sub_resource type="CircleShape2D" id=5]
+resource_local_to_scene = true
+radius = 1000.0
+
 [node name="Node" type="Node"]
 script = ExtResource( 5 )
 searchRadius = 5
 
-[node name="TileMap" type="TileMap" parent="."]
-tile_set = SubResource( 3 )
-cell_size = Vector2( 32, 32 )
-cell_quadrant_size = 32
-cell_half_offset = 0
-cell_y_sort = true
-format = 1
-script = ExtResource( 2 )
+[node name="tPaneSlave" type="Node2D" parent="."]
+visible = false
+z_index = 2
 
-[node name="Line2D" type="Line2D" parent="."]
-width = 2.0
-default_color = Color( 1, 1, 1, 1 )
+[node name="TPanel" type="ColorRect" parent="tPaneSlave"]
+margin_right = 134.0
+margin_bottom = 126.0
+color = Color( 0.152941, 0.145098, 0.2, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Travel" type="Button" parent="tPaneSlave/TPanel"]
+margin_left = 6.51996
+margin_top = 53.3096
+margin_right = 126.52
+margin_bottom = 73.3096
+text = "Travel"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="System" type="Button" parent="tPaneSlave/TPanel"]
+margin_left = 7.01996
+margin_top = 76.3096
+margin_right = 126.02
+margin_bottom = 96.3096
+text = "System Map"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Back" type="Button" parent="tPaneSlave/TPanel"]
+margin_left = 7.01996
+margin_top = 99.0138
+margin_right = 126.02
+margin_bottom = 119.014
+text = "Back"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SystemName" type="Label" parent="tPaneSlave/TPanel"]
+margin_top = -1.0
+margin_right = 133.0
+margin_bottom = 25.0
+custom_fonts/font = SubResource( 4 )
+text = "TEMP SYSTEM NAME"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PlanetNum" type="Label" parent="tPaneSlave/TPanel"]
+margin_left = 1.0
+margin_top = 22.2182
+margin_right = 134.0
+margin_bottom = 52.2182
+custom_fonts/font = SubResource( 4 )
+text = "Planets : 0"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Ship" type="Sprite" parent="."]
-position = Vector2( -1, 0 )
 scale = Vector2( 0.3, 0.3 )
-z_index = 2
+z_index = 1
 texture = ExtResource( 4 )
 
+[node name="Area2D" type="Area2D" parent="Ship"]
+collision_layer = 512
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ship/Area2D"]
+shape = SubResource( 5 )
+
+[node name="ClusterContainer" type="Node2D" parent="."]
+
 [node name="Camera2D" type="Camera2D" parent="."]
+visible = false
 current = true
-limit_left = 0
-limit_top = 0
+zoom = Vector2( 0.5, 0.5 )
 smoothing_enabled = true
 script = ExtResource( 3 )
 
-[node name="tPanelSlave" type="Sprite" parent="."]
-visible = false
+[node name="Line2D" type="Line2D" parent="."]
+z_index = -1
+z_as_relative = false
+width = 2.0
+default_color = Color( 1, 1, 1, 1 )
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
@@ -101,91 +127,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="TPanel" type="Control" parent="CanvasLayer"]
-visible = false
-anchor_right = 0.252
-anchor_bottom = 0.225
-margin_left = 330.0
-margin_top = 170.0
-margin_right = 301.72
-margin_bottom = 229.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="ColorRect" type="ColorRect" parent="CanvasLayer/TPanel"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-color = Color( 0.152941, 0.145098, 0.2, 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Travel" type="Button" parent="CanvasLayer/TPanel"]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -60.0
-margin_top = -3.0
-margin_right = 60.0
-margin_bottom = 17.0
-text = "Travel"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="System" type="Button" parent="CanvasLayer/TPanel"]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -59.5
-margin_top = 20.0
-margin_right = 59.5
-margin_bottom = 40.0
-text = "System Map"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Back" type="Button" parent="CanvasLayer/TPanel"]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -59.5
-margin_top = 42.7042
-margin_right = 59.5
-margin_bottom = 62.7042
-text = "Back"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Label" type="Label" parent="CanvasLayer/TPanel"]
-margin_top = -1.0
-margin_right = 133.0
-margin_bottom = 25.0
-custom_fonts/font = SubResource( 4 )
-text = "TEMP SYSTEM NAME"
-align = 1
-valign = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="PlanetNum" type="Label" parent="CanvasLayer/TPanel"]
-margin_left = 1.0
-margin_top = 22.2182
-margin_right = 134.0
-margin_bottom = 52.2182
-custom_fonts/font = SubResource( 4 )
-text = "Planets : 0"
-align = 1
-valign = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
 [node name="Pause_Menu" parent="." instance=ExtResource( 6 )]
+[connection signal="area_entered" from="Ship/Area2D" to="." method="_on_Area2D_area_entered"]
+[connection signal="input_event" from="Ship/Area2D" to="." method="_on_Area2D_input_event"]
+[connection signal="CanUpdate" from="Camera2D" to="." method="_on_Camera2D_CanUpdate"]

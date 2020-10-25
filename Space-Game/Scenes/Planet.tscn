@@ -50,7 +50,7 @@ export var c1t = 0.428
 export var c2t = 0.516
 export var c3t = 0.634
 
-var planet: Global.SolarSystem.Planet
+var planet: Galaxy.Planet
 
 var nSeed = 1
 var octaves = 1
@@ -67,11 +67,9 @@ var noise := OpenSimplexNoise.new()
 var mat
 
 func _load_planet():
-	var _x = str(SystemID.x)
-	var _y = str(SystemID.y)
-	if Global.systemDictionary[_x][_y].planets[LocalID] != null:
+	if Global.clusterContainer[Global.currentCluster].systems[Global.currentSystem].planets[LocalID] != null:
 		print(\"everything is Kosher\")
-		planet = Global.systemDictionary[_x][_y].planets[LocalID]
+		planet = Global.clusterContainer[Global.currentCluster].systems[Global.currentSystem].planets[LocalID]
 		
 		colour1 = planet.colour1
 		colour2 = planet.colour2
