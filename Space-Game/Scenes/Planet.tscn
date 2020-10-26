@@ -38,10 +38,6 @@ onready var clouds : MeshInstance = $Clouds
 
 signal clickedOn
 
-export var SystemID: Vector2
-export var ID: int
-export var LocalID: int
-
 export var colour1 = Color(0.33,0.45,0.53,1)
 export var colour2 = Color(0.88,0.91,0.67,1)
 export var colour3 = Color(0.58,0.88,0.51,1)
@@ -50,7 +46,7 @@ export var c1t = 0.428
 export var c2t = 0.516
 export var c3t = 0.634
 
-var planet: Galaxy.Planet
+var planetData : Galaxy.Planet
 
 var nSeed = 1
 var octaves = 1
@@ -58,39 +54,28 @@ var period = 64.0
 var persistence = 0.5
 var lacunarity = 2.0
 
+export(NoiseTexture) var Albedo = NoiseTexture.new()
+var noise := OpenSimplexNoise.new()
+var mat
 var dir
 
-export(NoiseTexture) var Albedo = NoiseTexture.new()
-
-var noise := OpenSimplexNoise.new()
-
-var mat
-
 func _load_planet():
-	if Global.clusterContainer[Global.currentCluster].systems[Global.currentSystem].planets[LocalID] != null:
-		print(\"everything is Kosher\")
-		planet = Global.clusterContainer[Global.currentCluster].systems[Global.currentSystem].planets[LocalID]
-		
-		colour1 = planet.colour1
-		colour2 = planet.colour2
-		colour3 = planet.colour3
-		c1t = planet.c1t
-		c2t = planet.c2t
-		c3t = planet.c3t
-		
-		noise.seed = planet.nSeed
-		noise.octaves = planet.octaves
-		noise.period = planet.period
-		noise.persistence = planet.persistence
-		noise.lacunarity = planet.lacunarity
-		collider.shape.radius = planet.radius
-		clouds.visible = planet.hasAtmosphere
-		dir = sqrt(planet.rotation * planet.rotation)/planet.rotation
-		_draw_planet()
-		
-	else:
-		print(\"Uh Oh\")
-		
+	colour1 = planetData.colour1
+	colour2 = planetData.colour2
+	colour3 = planetData.colour3
+	c1t = planetData.c1t
+	c2t = planetData.c2t
+	c3t = planetData.c3t
+	
+	noise.seed = planetData.nSeed
+	noise.octaves = planetData.octaves
+	noise.period = planetData.period
+	noise.persistence = planetData.persistence
+	noise.lacunarity = planetData.lacunarity
+	collider.shape.radius = planetData.radius
+	clouds.visible = planetData.hasAtmosphere
+	dir = sqrt(planetData.rotation * planetData.rotation)/planetData.rotation
+	_draw_planet()	
 		
 func _draw_planet():
 	var image = noise.get_seamless_image(400)
@@ -107,10 +92,8 @@ func _draw_planet():
 	mat.set_shader_param(\"Base_Albedo\",image_texture)
 
 #Constructor for the script				
-func setID(_sysID, _locID, _ID):
-	SystemID = _sysID
-	LocalID = _locID
-	ID = _ID
+func setID(planet : Galaxy.Planet):
+	planetData = planet
 	
 # Called when the node enters the scene tree for the first time.
 func _ready()->void:
@@ -118,8 +101,8 @@ func _ready()->void:
 	_load_planet()
 
 func _process(delta):
-	rotate_y(delta * planet.rotation/planet.radius)
-	clouds.rotate_y(delta * -planet.rotation/planet.radius/5)
+	rotate_y(delta * planetData.rotation/planetData.radius)
+	clouds.rotate_y(delta * -planetData.rotation/planetData.radius/5)
 
 func _on_Area_input_event(camera, event, click_position, click_normal, shape_idx):
 	if event is InputEventMouseButton:

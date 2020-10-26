@@ -14,8 +14,7 @@ func setID(id : Vector2, cluster : Galaxy.Cluster):
 func _on_Area2D_input_event(viewport, event, shape_idx):
 	if event is InputEventMouseButton:
 		if event.button_index == BUTTON_LEFT and event.pressed == true:
-			print("CLICKEDON")
-			print(self.global_position)
+			print("\tClicked On : ",ID," / Global Position : ",global_position)
 			emit_signal("clickedOn")
 
 

@@ -4,18 +4,12 @@ var rng = RandomNumberGenerator.new()
 onready var windowSize = Vector2(ProjectSettings.get_setting("display/window/size/width"),ProjectSettings.get_setting("display/window/size/height"))
 
 var clusterContainer = {}
-
-var coordContainer = []
-var systemDictionary = {}
 var discoveredSystems = []
 
-var currentSystem := Vector2.ZERO
-var currentCluster := Vector2.ZERO
+var currentSystemID := Vector2.ZERO
+var currentClusterID := Vector2.ZERO
 
-var currGlobalCoords := Vector2.ZERO
-
-var currSys : Galaxy.SolarSystem
-var currClust : Galaxy.Cluster
+var currentGlobalCoords := Vector2.ZERO
 
 var planetNum = 0
 var systemNum = 0
@@ -29,7 +23,6 @@ func addCluster(clusterID := Vector2.ZERO, clusterName := ""):
 
 func init_system():
 	resetSystem()
-	currClust = clusterContainer[currentCluster]
 	print("planets: " + str(planetNum))
 	print("systems: " + str(systemNum))
 			

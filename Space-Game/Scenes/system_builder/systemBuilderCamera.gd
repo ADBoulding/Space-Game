@@ -8,6 +8,7 @@ var zoomLevel = 0
 var focusedOn = -1
 
 var totalPlanets
+var canMove = true
 
 enum STATE {
 	FOCUSED,
@@ -23,13 +24,17 @@ func _ready():
 	zoomLevel = 0
 	
 func _getPlanets():
-	for node in get_parent().pNodes:
+	var pNodes = get_parent().get_node("container").get_children()
+	camPosition.clear()
+	for node in pNodes:
 		var _position = node.translation
 		_position.z = node.mesh.radius + 2
 		_position.x += .75
 		camPosition.append(_position)
 		
-func _input(event):
+func _unhandled_input(event):
+	if !canMove:
+		return
 	if cameraState == STATE.UNFOCUSED:
 		if event.is_action_pressed("ui_up"):
 			if zoomLevel < 2:
@@ -56,18 +61,18 @@ func _input(event):
 			if focusedOn > 0:
 				focusedOn -= 1
 				_focus(focusedOn)
-				print(focusedOn)
 		elif event.is_action_pressed("ui_right"):
 			if focusedOn < totalPlanets - 1:
 				focusedOn += 1
 				_focus(focusedOn)
-				print(focusedOn)
 		elif event.is_action_pressed("ui_down"):
 			cameraState = STATE.UNFOCUSED
 			planetInfo.hide()
 			_moveToPosition(normalPosition)
 
 func _process(delta):
+	if !canMove:
+		return
 	if cameraState == STATE.UNFOCUSED:
 		var input_vector = Vector3.ZERO
 		input_vector.x = Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
@@ -89,6 +94,7 @@ func _focus(id):
 
 func _on_System_finishedGen():
 	_getPlanets()
-	totalPlanets = get_parent().system.planetNum
-	print(camPosition)
-	print("Planets",totalPlanets)
+	totalPlanets = get_parent().system.planets.size()
+	
+func _canMove(value):
+	canMove = value

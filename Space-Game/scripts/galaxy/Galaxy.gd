@@ -4,6 +4,8 @@ var cellSize = 32 			# 32 pixels per cell
 var clusterSize = 32 		# 32 cells in a cluster
 var systemChance = 0.07 	# Chance of system occuring
 
+var startSystem = Vector2(clusterSize/2,clusterSize/2)
+
 enum PLANETTYPE {
 	earthLike,
 	waterWorld,
@@ -72,44 +74,56 @@ class Cluster:
 				systemNum = Global.rng.randi_range(avg - 15,avg + 15)
 			_:
 				systemNum = System_Number
-		_populateSystem(systemNum)
-		_nameSystems()
+		for i in systemNum:
+			var _name = _findName()
+			_addSystem(i, _name)
 	
-	func _populateSystem(number : int):
+	func _addSystem(_i : int, sysName := ""):
 		Global.randomizeRNG()
-		for i in number:
-			Global.systemNum += 1
-			if id == Vector2.ZERO and i == 0:
-				var tVec = Vector2(Galaxy.clusterSize/2,Galaxy.clusterSize/2)
-				systems[tVec] = SolarSystem.new(i)
-			else:
-				var _t = false
-				var x
-				var y
-				while _t == false:
-					x = Global.rng.randi_range(0,Galaxy.clusterSize - 1)
-					y = Global.rng.randi_range(0,Galaxy.clusterSize - 1)
-					if !systems.has(Vector2(x,y)):
-						systems[Vector2(x,y)] = SolarSystem.new(i)
-						_t = true
-	
-	func _nameSystems():
-		for system in systems:
+		Global.systemNum += 1
+		if id == Vector2.ZERO and _i == 0:
+			systems[Galaxy.startSystem] = SolarSystem.new(sysName)
+			#_nameSystem(tVec)
+		else:
 			var _t = false
-			while !_t:
-				var _sys = NameGenerator.randomSystem(clusterName)
-				if !_sys in systemNames:
-					systems[system].name = _sys
+			var x
+			var y
+			while _t == false:
+				x = Global.rng.randi_range(0,Galaxy.clusterSize - 1)
+				y = Global.rng.randi_range(0,Galaxy.clusterSize - 1)
+				if !systems.has(Vector2(x,y)):
+					systems[Vector2(x,y)] = SolarSystem.new(sysName)
 					_t = true
+	
+	func _findName():
+		var _t = false
+		while !_t:
+			var _sys = NameGenerator.randomSystem(clusterName)
+			if !_sys in systemNames:
+				systemNames.append(_sys)
+				return(_sys)
 
 	func _nameCluster():
 		clusterName = NameGenerator.randomCluster()
+		
+	func _toJSON():
+		var cJ = {
+			"id" : self.id,
+			"position" : self.position,
+			"clusterName" : self.clusterName,
+			"systems" : {},
+			"systemNum" : self.systemNum,
+			"systemNames" : self.systemNames
+		}
+		for c in systems:
+			var cJSON = systems[c]._toJSON()
+			cJ["systems"][c] = cJSON
+		return cJ			
 
 # Solar System Class [Rests Within Chunks]
 class SolarSystem:
 	
 	var name					# Name of the system
-	var id						# ID of the system in Vec2
 	var planets = []			# Planet storage
 	var planetNum: int			# Number of planets...
 	var size setget ,size_get	# Allows for code to reference this
@@ -118,10 +132,10 @@ class SolarSystem:
 	# Randomization and addition of planets	
 	func add_new_planet(_localID):
 		
-		Global.randomizeRNG()				# Randomizes the RNG
-		var planetNum = Global.planetNum	# Obtains the total amount of planets
-		var _pType	 					# Defines a variable to hold the PlanetType
-		var _name = str(self.name, " ", _localID)
+		Global.randomizeRNG()						# Randomizes the RNG
+		var planetNum = 0							# Obtains the total amount of planets
+		var _pType	 								# Defines a variable to hold the PlanetType
+		var _name = str(self.name, " ", _localID)	#
 		
 		# Randomize the planet type
 		var typeChance = Global.rng.randf_range(0.0,1.0)
@@ -165,8 +179,8 @@ class SolarSystem:
 		Global.planetNum += 1				# Adds to the global planet number
 
 	# Initializes the System
-	func _init(_ID := -1, _planetNum := -1, _name := false):
-		id = _ID
+	func _init(systemName := "", _planetNum := -1, _name := false):
+		name = systemName
 		if _planetNum == -1:
 			Global.randomizeRNG()
 			planetNum = Global.rng.randi_range(1,8)
@@ -179,6 +193,18 @@ class SolarSystem:
 		
 	func size_get():
 		return planets.size()
+		
+	func _toJSON():
+		var sJSON = {
+			"name" : self.name,
+			"planets" : {},
+			"planetNum" : self.planetNum,
+			"hasData" : self.hasData
+		}
+		for i in planets.size():
+			var pJ = planets[i]._convertToJSON()
+			sJSON["planets"][i] = pJ
+		return sJSON
 		
 class Planet:
 	# Storage for id
@@ -215,10 +241,7 @@ class Planet:
 
 	func _init(planetDictionary):
 		var _p = planetDictionary
-		if _p["id"] == -1:
-			id = Global.planetNum
-		else:
-			id = _p["id"]
+		id = _p["id"]
 		locID = _p["localID"]
 		name = _p["name"]
 		planetType = _p["planetType"]
@@ -236,3 +259,28 @@ class Planet:
 		period = _p["period"]
 		persistence = _p["persistence"]
 		lacunarity = _p["lacunarity"]
+
+	func _convertToJSON():
+		var pJSON = {
+			"name" : self.name,
+			"id" : self.id,
+			"locID" : self.locID,
+			"discovered" : self.discovered,
+			"planetType" : self.planetType,
+			"hasAtmosphere" : self.hasAtmosphere,
+			"rotation" : self.rotation,
+			"settlement" : self.settlement,
+			"nSeed" : self.nSeed,
+			"octaves" : self.octaves,
+			"period" : self.period,
+			"persistence" : self.persistence,
+			"lacunarity" : self.lacunarity,
+			"radius" : self.radius,
+			"colour1" : self.colour1,
+			"colour2" : self.colour2,
+			"colour3" : self.colour3,
+			"c1t" : self.c1t,
+			"c2t" : self.c2t,
+			"c3t" : self.c3t,
+		}
+		return pJSON

@@ -55,7 +55,7 @@ func _process(delta):
 				firstTime = false
 				emit_signal("CanUpdate")
 			return
-		var _z = Vector2(lerp(zoom.x,_dzoom, delta), lerp(zoom.y,_dzoom, delta))
+		var _z = Vector2(lerp(zoom.x,_dzoom, delta * 2), lerp(zoom.y,_dzoom, delta * 2))
 		zoom = _z
 	
 	if focused:

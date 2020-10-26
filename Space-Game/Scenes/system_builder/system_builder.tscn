@@ -1,0 +1,205 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://Fonts/MainFont_25.tres" type="DynamicFont" id=1]
+[ext_resource path="res://Scenes/system_builder/systemBuilderCamera.gd" type="Script" id=3]
+[ext_resource path="res://assets/GUI/PlanetInfo.png" type="Texture" id=4]
+[ext_resource path="res://Scenes/Planet_Gen/4MUGBG.jpg" type="Texture" id=5]
+[ext_resource path="res://Scenes/system_builder/planetBuilderInfo.gd" type="Script" id=6]
+[ext_resource path="res://Scenes/system_builder/systemBuilder.gd" type="Script" id=7]
+
+[sub_resource type="PanoramaSky" id=1]
+radiance_size = 4
+panorama = ExtResource( 5 )
+
+[sub_resource type="Environment" id=2]
+background_mode = 2
+background_sky = SubResource( 1 )
+ambient_light_color = Color( 1, 1, 1, 1 )
+ambient_light_energy = 6.73
+ambient_light_sky_contribution = 0.88
+
+[sub_resource type="SphereMesh" id=3]
+radius = 10.0
+height = 20.0
+
+[node name="System" type="Spatial"]
+script = ExtResource( 7 )
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource( 2 )
+
+[node name="Camera" type="Camera" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 25, 0, 40 )
+current = true
+fov = 50.8
+script = ExtResource( 3 )
+
+[node name="CSGMesh" type="CSGMesh" parent="."]
+mesh = SubResource( 3 )
+
+[node name="container" type="Node2D" parent="."]
+
+[node name="SystemPanel" type="TextureRect" parent="."]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -220.0
+margin_bottom = 360.0
+texture = ExtResource( 4 )
+flip_h = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="LineEdit" type="LineEdit" parent="SystemPanel"]
+margin_left = 14.0
+margin_top = 21.0
+margin_right = 206.0
+margin_bottom = 53.0
+align = 1
+placeholder_text = "System Name"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Planets" type="Label" parent="SystemPanel"]
+margin_left = 14.0
+margin_top = 56.4205
+margin_right = 142.0
+margin_bottom = 79.4205
+custom_fonts/font = ExtResource( 1 )
+text = "Planets : "
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="newPlanet" type="Button" parent="SystemPanel"]
+margin_left = 143.0
+margin_top = 56.0
+margin_right = 206.0
+margin_bottom = 79.0
+custom_fonts/font = ExtResource( 1 )
+text = "newPlanet"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SystemReport" type="ColorRect" parent="."]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_top = -68.0
+margin_right = 142.0
+color = Color( 0, 0, 0, 0.478431 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SystemName" type="Label" parent="SystemReport"]
+margin_left = 8.0
+margin_top = 4.0
+margin_right = 101.0
+margin_bottom = 19.0
+custom_fonts/font = ExtResource( 1 )
+text = "System :"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PlanetNum" type="Label" parent="SystemReport"]
+margin_left = 8.0
+margin_top = 18.1421
+margin_right = 101.0
+margin_bottom = 33.1421
+custom_fonts/font = ExtResource( 1 )
+text = "Planets : 0"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Earthlike" type="Label" parent="SystemReport"]
+margin_left = 8.0
+margin_top = 32.0
+margin_right = 101.0
+margin_bottom = 45.0
+custom_fonts/font = ExtResource( 1 )
+text = "Earthlike?: N"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Settlement" type="Label" parent="SystemReport"]
+margin_left = 8.0
+margin_top = 47.487
+margin_right = 101.0
+margin_bottom = 62.487
+custom_fonts/font = ExtResource( 1 )
+text = "Settlement?: N"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="planetInfo" type="Control" parent="."]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -220.0
+margin_bottom = 359.0
+script = ExtResource( 6 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect" type="TextureRect" parent="planetInfo"]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -220.0
+margin_bottom = 360.0
+texture = ExtResource( 4 )
+stretch_mode = 1
+__meta__ = {
+"_edit_use_anchors_": true
+}
+
+[node name="BuiltIn" type="ColorRect" parent="planetInfo/TextureRect"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 0.420456
+margin_bottom = 0.420441
+color = Color( 1, 1, 1, 0 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="planetInfo/TextureRect/BuiltIn"]
+margin_left = 14.0
+margin_top = 56.0
+margin_right = 77.0
+margin_bottom = 79.0
+custom_fonts/font = ExtResource( 1 )
+text = "Planet Type"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="LineEdit2" type="LineEdit" parent="planetInfo/TextureRect"]
+margin_left = 13.0
+margin_top = 21.0
+margin_right = 207.0
+margin_bottom = 53.0
+align = 1
+placeholder_text = "Planet Name"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+[connection signal="finishedGen" from="." to="Camera" method="_on_System_finishedGen"]
+[connection signal="finishedGen" from="." to="planetInfo" method="_on_System_finishedGen"]
+[connection signal="focus_entered" from="SystemPanel/LineEdit" to="Camera" method="_on_LineEdit_focus_entered"]
+[connection signal="focus_entered" from="SystemPanel/LineEdit" to="." method="_on_LineEdit_focus_entered"]
+[connection signal="focus_exited" from="SystemPanel/LineEdit" to="." method="_on_LineEdit_focus_exited"]
+[connection signal="text_entered" from="SystemPanel/LineEdit" to="." method="_on_LineEdit_text_entered"]
+[connection signal="pressed" from="SystemPanel/newPlanet" to="." method="_on_newPlanet_pressed"]
+[connection signal="focus_entered" from="planetInfo/TextureRect/LineEdit2" to="." method="_on_LineEdit2_focus_entered"]
+[connection signal="focus_exited" from="planetInfo/TextureRect/LineEdit2" to="." method="_on_LineEdit2_focus_exited"]
+[connection signal="text_entered" from="planetInfo/TextureRect/LineEdit2" to="planetInfo" method="_on_LineEdit2_text_entered"]

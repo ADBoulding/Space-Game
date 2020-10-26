@@ -17,7 +17,6 @@ func _changePlanetInfo(ID: int):
 	var _type = Galaxy.planetType[planet.planetType]["fullName"]
 	title.text = _title
 	planetType.text = _type
-	
 
 func _on_System_finishedGen():
 	system = get_parent().system
