@@ -6,6 +6,8 @@ onready var windowSize = Vector2(ProjectSettings.get_setting("display/window/siz
 var clusterContainer = {}
 var discoveredSystems = []
 
+var clusterLength = 6
+
 var currentSystemID := Vector2.ZERO
 var currentClusterID := Vector2.ZERO
 
@@ -30,6 +32,6 @@ func resetSystem():
 	planetNum = 0
 	systemNum = 0
 	clusterContainer.clear()
-	for i in [-2,-1,0,1,2]:
-		for j in [-2,-1,0,1,2]:
+	for i in range(-clusterLength,clusterLength + 1):
+		for j in range(-clusterLength,clusterLength + 1):
 			addCluster(Vector2(i,j))

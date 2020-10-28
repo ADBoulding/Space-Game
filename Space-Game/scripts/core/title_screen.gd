@@ -6,9 +6,9 @@ export(PackedScene) var target_scene
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	newGame.connect("button_down", self, "_newGame")
-	if Global.systemDictionary != {}:
-		print("RESETTING SYSTEM")
-		Global.resetSystem()
+#	if Global.clusterContainer != {}:
+#		print("RESETTING SYSTEM")
+#		Global.resetSystem()
 
 func _newGame():
 	print("GOING TO NEW GAME")

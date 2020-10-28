@@ -177,8 +177,8 @@ func updateLabel():
 
 func updateClusters():
 	clusters.clear()
-	for i in [-2,-1,0,1,2]:
-		for j in [-2,-1,0,1,2]:
+	for i in range(-Global.clusterLength,Global.clusterLength + 1):
+		for j in range(-Global.clusterLength,Global.clusterLength + 1):
 			var offset = Vector2(i,j)
 			var cluster = currentClusterID + offset
 			clusters.append(cluster)

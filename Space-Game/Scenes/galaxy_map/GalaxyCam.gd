@@ -117,7 +117,8 @@ func buffer(at : Vector2, dest : Vector2, buffer: float):
 	return false
 
 func _set_limits(cluster : Vector2):
-	var rect = Vector2(3*Galaxy.cellSize*Galaxy.clusterSize,3*Galaxy.cellSize*Galaxy.clusterSize)
+	var clusterAmount = Global.clusterLength * 2 + 1
+	var rect = Vector2(clusterAmount*Galaxy.cellSize*Galaxy.clusterSize,clusterAmount*Galaxy.cellSize*Galaxy.clusterSize)
 	var _offset = rect / 2
 	var camOffset = Vector2(Global.windowSize.x,Global.windowSize.y)
 	var location = cluster * Galaxy.cellSize * Galaxy.clusterSize
