@@ -1,10 +1,13 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=12 format=2]
 
+[ext_resource path="res://icon.png" type="Texture" id=1]
+[ext_resource path="res://Scenes/Test/starfield.shader" type="Shader" id=2]
 [ext_resource path="res://Scenes/galaxy_map/GalaxyCam.gd" type="Script" id=3]
 [ext_resource path="res://assets/ship/1_0000_Ship.png" type="Texture" id=4]
 [ext_resource path="res://Scenes/galaxy_map/Galaxy_Map.gd" type="Script" id=5]
 [ext_resource path="res://Scenes/pause_screen/Pause.tscn" type="PackedScene" id=6]
 [ext_resource path="res://assets/Text/HeartbitXX.ttf" type="DynamicFontData" id=7]
+[ext_resource path="res://Scenes/galaxy_map/Starfield.gd" type="Script" id=8]
 
 [sub_resource type="DynamicFont" id=1]
 size = 18
@@ -14,6 +17,13 @@ font_data = ExtResource( 7 )
 [sub_resource type="CircleShape2D" id=2]
 resource_local_to_scene = true
 radius = 1000.0
+
+[sub_resource type="ShaderMaterial" id=3]
+shader = ExtResource( 2 )
+shader_param/octaves = 5
+shader_param/viewport_size = Vector2( 320, 180 )
+shader_param/x_offset = 0.0
+shader_param/offset = Vector2( 0, 0 )
 
 [node name="Node" type="Node"]
 script = ExtResource( 5 )
@@ -100,10 +110,10 @@ shape = SubResource( 2 )
 [node name="ClusterContainer" type="Node2D" parent="."]
 
 [node name="Camera2D" type="Camera2D" parent="."]
-visible = false
 current = true
 zoom = Vector2( 0.5, 0.5 )
 smoothing_enabled = true
+smoothing_speed = 10.0
 script = ExtResource( 3 )
 
 [node name="Line2D" type="Line2D" parent="."]
@@ -113,6 +123,7 @@ width = 2.0
 default_color = Color( 1, 1, 1, 1 )
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = -5
 
 [node name="Label" type="Label" parent="CanvasLayer"]
 margin_left = 8.51466
@@ -126,6 +137,24 @@ valign = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="CanvasLayer"]
+
+[node name="Sky" type="TextureRect" parent="CanvasLayer/ParallaxBackground"]
+show_behind_parent = true
+material = SubResource( 3 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_bottom = 3.05176e-05
+mouse_filter = 2
+texture = ExtResource( 1 )
+expand = true
+stretch_mode = 1
+script = ExtResource( 8 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+scroll_scale = 0.1
 
 [node name="Pause_Menu" parent="." instance=ExtResource( 6 )]
 [connection signal="area_entered" from="Ship/Area2D" to="." method="_on_Area2D_area_entered"]

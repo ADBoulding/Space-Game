@@ -2,9 +2,49 @@ extends Node
 
 var cellSize = 32 			# 32 pixels per cell
 var clusterSize = 32 		# 32 cells in a cluster
-var systemChance = 0.07 	# Chance of system occuring
+var systemChance = 0.05 	# Chance of system occuring
 
 var startSystem = Vector2(clusterSize/2,clusterSize/2)
+
+enum STARTYPE {	O,	B,	A,	F,	G,	K,	M }
+
+var starColour = {
+	STARTYPE.O : {
+		"colour" : Color(0.55,0.55,1,1),
+		"sizeRange" : [6.6,6.6],
+		"chance" : [0.99,1.0]
+	},
+	STARTYPE.B : {
+		"colour" : Color(0.6,0.71,1,1),
+		"sizeRange" : [1.8,4.0],
+		"chance" : [0.97,0.99]
+	},
+	STARTYPE.A : {
+		"colour" : Color(1,1,1,1),
+		"sizeRange" : [1.4,1.8],
+		"chance" : [0.93,0.97]
+	},
+	STARTYPE.F : {
+		"colour" : Color(1,1,1,1),
+		"sizeRange" : [1.15,1.4],
+		"chance" : [0.85,0.93]
+	},
+	STARTYPE.G : {
+		"colour" : Color(1,0.96,0.7,1),
+		"sizeRange" : [0.96,1.15],
+		"chance" : [0.7,0.85]
+	},
+	STARTYPE.K : {
+		"colour" : Color(1,0.74,0.55,1),
+		"sizeRange" : [0.7,0.96],
+		"chance" : [0.5,0.7]
+	},
+	STARTYPE.M : {
+		"colour" : Color(1,0.56,0.53,1),
+		"sizeRange" : [0.5,0.7],
+		"chance" : [0.0,0.5]
+	},
+}
 
 enum PLANETTYPE {
 	earthLike,
@@ -123,11 +163,13 @@ class Cluster:
 # Solar System Class [Rests Within Chunks]
 class SolarSystem:
 	
-	var name					# Name of the system
-	var planets = []			# Planet storage
-	var planetNum: int			# Number of planets...
-	var size setget ,size_get	# Allows for code to reference this
-	var hasData = false			# Whether the player has data (visited, been there, etc.)
+	var name							# Name of the system
+	var planets = []					# Planet storage
+	var starSize : float				# Size of the star
+	var starType : int					# STARTYPE enum of the star colour 
+	var planetNum: int					# Number of planets...
+	var size setget ,size_get			# Allows for code to reference this
+	var hasData = false					# Whether the player has data (visited, been there, etc.)
 	
 	# Randomization and addition of planets	
 	func add_new_planet(_localID):
@@ -180,14 +222,24 @@ class SolarSystem:
 
 	# Initializes the System
 	func _init(systemName := "", _planetNum := -1, _name := false):
+		Global.randomizeRNG()
 		name = systemName
 		if _planetNum == -1:
-			Global.randomizeRNG()
 			planetNum = Global.rng.randi_range(1,8)
 		else:
 			planetNum = _planetNum
 		if _name:
 			name = NameGenerator.randomSystem()
+		
+		var _sT = Global.rng.randf_range(0.0,1.0)
+		for _star in Galaxy.starColour:
+			var _r = Galaxy.starColour[_star]["chance"]
+			if _sT <= _r[1] and _sT >= _r[0]:
+				starType = _star
+		
+		var sRange = Galaxy.starColour[starType]["sizeRange"]
+		starSize = Global.rng.randf_range(sRange[0],sRange[1])
+		
 		for i in planetNum:
 			add_new_planet(i)
 		

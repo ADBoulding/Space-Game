@@ -30,6 +30,6 @@ func resetSystem():
 	planetNum = 0
 	systemNum = 0
 	clusterContainer.clear()
-	for i in [-1,0,1]:
-		for j in [-1,0,1]:
+	for i in [-2,-1,0,1,2]:
+		for j in [-2,-1,0,1,2]:
 			addCluster(Vector2(i,j))

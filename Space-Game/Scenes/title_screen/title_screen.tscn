@@ -1,20 +1,20 @@
 [gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://assets/ship/1_0008_Sky.png" type="Texture" id=1]
-[ext_resource path="res://Scenes/title_screen/OptionButton.tscn" type="PackedScene" id=2]
-[ext_resource path="res://Scenes/title_screen/ContinueButton.tscn" type="PackedScene" id=3]
-[ext_resource path="res://Scenes/title_screen/NewGameButton.tscn" type="PackedScene" id=4]
-[ext_resource path="res://Fonts/font.tres" type="DynamicFont" id=5]
-[ext_resource path="res://assets/ship/1_0003_Cliffs_FG.png" type="Texture" id=6]
-[ext_resource path="res://assets/ship/1_0002_FG.png" type="Texture" id=7]
-[ext_resource path="res://assets/ship/1_0006_Desert.png" type="Texture" id=8]
-[ext_resource path="res://assets/ship/1_0005_Mountain_Mid_2.png" type="Texture" id=9]
+[ext_resource path="res://assets/ship/1_0005_Mountain_Mid_2.png" type="Texture" id=2]
+[ext_resource path="res://assets/ship/1_0006_Desert.png" type="Texture" id=3]
+[ext_resource path="res://assets/ship/1_0002_FG.png" type="Texture" id=4]
+[ext_resource path="res://assets/ship/1_0003_Cliffs_FG.png" type="Texture" id=5]
+[ext_resource path="res://Scenes/title_screen/NewGameButton.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Scenes/title_screen/OptionButton.tscn" type="PackedScene" id=7]
+[ext_resource path="res://Scenes/title_screen/ContinueButton.tscn" type="PackedScene" id=8]
+[ext_resource path="res://Scenes/galaxy_map/Galaxy_Map.tscn" type="PackedScene" id=9]
 [ext_resource path="res://assets/ship/1_0007_Clouds.png" type="Texture" id=10]
 [ext_resource path="res://assets/ship/1_0004_Mountain_Mid.png" type="Texture" id=11]
 [ext_resource path="res://assets/ship/1_0000_Ship.png" type="Texture" id=12]
 [ext_resource path="res://assets/ship/1_0001_Shadow.png" type="Texture" id=13]
 [ext_resource path="res://scripts/core/title_screen.gd" type="Script" id=14]
-[ext_resource path="res://Scenes/galaxy_map/Galaxy_Map.tscn" type="PackedScene" id=15]
+[ext_resource path="res://Fonts/font.tres" type="DynamicFont" id=15]
 
 [node name="TitleScreen" type="Control"]
 anchor_right = 1.0
@@ -25,7 +25,7 @@ __meta__ = {
 "_edit_use_anchors_": false,
 "_edit_vertical_guides_": [ 218.194 ]
 }
-target_scene = ExtResource( 15 )
+target_scene = ExtResource( 9 )
 
 [node name="1_0008_Sky" type="Sprite" parent="."]
 position = Vector2( 319.627, 192.917 )
@@ -36,22 +36,22 @@ __meta__ = {
 }
 
 [node name="1_0006_Desert" type="Sprite" parent="1_0008_Sky"]
-texture = ExtResource( 8 )
+texture = ExtResource( 3 )
 
 [node name="1_0007_Clouds" type="Sprite" parent="1_0008_Sky"]
 texture = ExtResource( 10 )
 
 [node name="1_0005_Mountain_Mid_2" type="Sprite" parent="1_0008_Sky"]
-texture = ExtResource( 9 )
+texture = ExtResource( 2 )
 
 [node name="1_0004_Mountain_Mid" type="Sprite" parent="1_0008_Sky"]
 texture = ExtResource( 11 )
 
 [node name="1_0003_Cliffs_FG" type="Sprite" parent="1_0008_Sky"]
-texture = ExtResource( 6 )
+texture = ExtResource( 5 )
 
 [node name="1_0002_FG" type="Sprite" parent="1_0008_Sky"]
-texture = ExtResource( 7 )
+texture = ExtResource( 4 )
 
 [node name="1_0000_Ship" type="Sprite" parent="1_0008_Sky"]
 position = Vector2( 116.511, 155.98 )
@@ -90,7 +90,7 @@ margin_left = -100.0
 margin_top = -12.5
 margin_right = 100.0
 margin_bottom = 12.5
-custom_fonts/font = ExtResource( 5 )
+custom_fonts/font = ExtResource( 15 )
 text = "Generic Space Game"
 align = 1
 valign = 1
@@ -117,12 +117,12 @@ margin_bottom = 100.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="NewGameButton" parent="Menu/Buttons" instance=ExtResource( 4 )]
+[node name="NewGameButton" parent="Menu/Buttons" instance=ExtResource( 6 )]
 
-[node name="ContinueButton" parent="Menu/Buttons" instance=ExtResource( 3 )]
+[node name="ContinueButton" parent="Menu/Buttons" instance=ExtResource( 8 )]
 margin_top = 24.0
 margin_bottom = 44.0
 
-[node name="OptionButton" parent="Menu/Buttons" instance=ExtResource( 2 )]
+[node name="OptionButton" parent="Menu/Buttons" instance=ExtResource( 7 )]
 margin_top = 48.0
 margin_bottom = 68.0

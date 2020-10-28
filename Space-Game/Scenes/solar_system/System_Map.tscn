@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://Fonts/MainFont_25.tres" type="DynamicFont" id=1]
 [ext_resource path="res://Fonts/font.tres" type="DynamicFont" id=2]
@@ -8,21 +8,30 @@
 [ext_resource path="res://scripts/galaxy/SolarSystem.gd" type="Script" id=6]
 [ext_resource path="res://Scenes/solar_system/systemCamera.gd" type="Script" id=7]
 [ext_resource path="res://Scenes/pause_screen/Pause.tscn" type="PackedScene" id=8]
+[ext_resource path="res://icon.png" type="Texture" id=9]
+[ext_resource path="res://Scenes/galaxy_map/Starfield.gd" type="Script" id=10]
+[ext_resource path="res://Scenes/Test/starfield.shader" type="Shader" id=11]
 
-[sub_resource type="PanoramaSky" id=1]
-radiance_size = 4
+[sub_resource type="PanoramaSky" id=4]
+radiance_size = 5
 panorama = ExtResource( 5 )
 
 [sub_resource type="Environment" id=2]
-background_mode = 2
-background_sky = SubResource( 1 )
-ambient_light_color = Color( 1, 1, 1, 1 )
-ambient_light_energy = 6.73
-ambient_light_sky_contribution = 0.88
+background_mode = 4
+background_sky = SubResource( 4 )
+background_canvas_max_layer = -5
+ambient_light_color = Color( 1, 0.996078, 0.976471, 1 )
 
 [sub_resource type="SphereMesh" id=3]
 radius = 10.0
 height = 20.0
+
+[sub_resource type="ShaderMaterial" id=5]
+shader = ExtResource( 11 )
+shader_param/octaves = 5
+shader_param/viewport_size = Vector2( 320, 180 )
+shader_param/x_offset = 0.0
+shader_param/offset = Vector2( 0, 0 )
 
 [node name="System" type="Spatial"]
 script = ExtResource( 6 )
@@ -137,6 +146,21 @@ __meta__ = {
 [node name="Pause_Menu" parent="." instance=ExtResource( 8 )]
 
 [node name="container" type="Node2D" parent="."]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = -5
+
+[node name="BSky" type="TextureRect" parent="CanvasLayer"]
+material = SubResource( 5 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+texture = ExtResource( 9 )
+expand = true
+script = ExtResource( 10 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 [connection signal="finishedGen" from="." to="Camera" method="_on_System_finishedGen"]
 [connection signal="finishedGen" from="." to="planetInfo" method="_on_System_finishedGen"]
 [connection signal="pressed" from="Control/Galaxy_Map" to="." method="_on_Galaxy_Map_pressed"]

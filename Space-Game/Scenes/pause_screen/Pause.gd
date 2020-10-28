@@ -19,5 +19,5 @@ func _on_Continue_pressed():
 
 func _on_MainMenu_pressed():
 	get_tree().paused = false
-	var target_scene = load("res://Scenes/title_screen.tscn")
+	var target_scene = load("res://Scenes/title_screen/title_screen.tscn")
 	var err = get_tree().change_scene_to(target_scene)	

@@ -2,12 +2,14 @@ extends Camera2D
 
 signal CanUpdate
 
+var sky : BSky
 export var speed = 20.0
 export var mSpeed = 10.0
 export var zoomAmount = [0.5,1,1.5]
 var _zoom_level = 0
 export (float, 0.0, 5.0) var buff = 1.0 
 var limits 
+var sky_pos : float
 
 var firstTime = true
 
@@ -21,6 +23,8 @@ onready var tPanel = get_parent().get_node("tPaneSlave/TPanel")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	sky = get_parent().get_node("CanvasLayer/ParallaxBackground/Sky")
+	sky.resize(get_viewport_rect().size)
 	_zoom_level = 1
 	zooming = true
 	focused = false
@@ -58,6 +62,8 @@ func _process(delta):
 		var _z = Vector2(lerp(zoom.x,_dzoom, delta * 2), lerp(zoom.y,_dzoom, delta * 2))
 		zoom = _z
 	
+	sky.set_offset(position)
+	
 	if focused:
 		return
 			
@@ -68,6 +74,7 @@ func _process(delta):
 	if input_vector != Vector2.ZERO:
 		if checkLimits(vecs, limits):
 			position = correctVector(vecs, limits)
+	
 
 func _unhandled_input(event):
 	if event is InputEventMouseButton:

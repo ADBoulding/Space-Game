@@ -177,8 +177,8 @@ func updateLabel():
 
 func updateClusters():
 	clusters.clear()
-	for i in [-1,0,1]:
-		for j in [-1,0,1]:
+	for i in [-2,-1,0,1,2]:
+		for j in [-2,-1,0,1,2]:
 			var offset = Vector2(i,j)
 			var cluster = currentClusterID + offset
 			clusters.append(cluster)
@@ -198,6 +198,7 @@ func drawClusters():
 			_cluster.position = cluster * Galaxy.clusterSize * Galaxy.cellSize - Vector2(clusterOffset,clusterOffset)
 			_cluster.generateCluster()
 			_cluster.name = str("c_",cluster)
+			print("Cluster : ",cluster,"\n\tPosition : ",_cluster.position)
 			container.add_child(_cluster, true)
 	for child in container.get_children():
 		for star in child.get_children():

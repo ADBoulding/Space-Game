@@ -11,7 +11,7 @@ onready var container : Node2D = $container
 
 var camLimits
 
-var planetResource = load("res://Scenes/Planet.tscn")
+var planetResource = load("res://Scenes/Planet_Gen/Planet.tscn")
 var planets = []
 
 var isManual = false

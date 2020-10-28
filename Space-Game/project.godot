@@ -9,6 +9,11 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "TextureRect",
+"class": "BSky",
+"language": "GDScript",
+"path": "res://Scenes/galaxy_map/Starfield.gd"
+}, {
 "base": "Reference",
 "class": "Character",
 "language": "GDScript",
@@ -20,6 +25,7 @@ _global_script_classes=[ {
 "path": "res://scripts/core/ship.gd"
 } ]
 _global_script_class_icons={
+"BSky": "",
 "Character": "",
 "Ship": ""
 }
@@ -27,7 +33,7 @@ _global_script_class_icons={
 [application]
 
 config/name="Space-Game"
-run/main_scene="res://Scenes/title_screen.tscn"
+run/main_scene="res://Scenes/title_screen/title_screen.tscn"
 config/icon="res://icon.png"
 
 [autoload]
