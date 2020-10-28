@@ -1,0 +1,7 @@
+[gd_scene format=2]
+
+[node name="potentials" type="Line2D"]
+z_index = -2
+z_as_relative = false
+width = 3.0
+default_color = Color( 0.627451, 0.678431, 0.901961, 1 )

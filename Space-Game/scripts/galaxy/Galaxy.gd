@@ -16,7 +16,7 @@ var starColour = {
 	},
 	STARTYPE.B : {
 		"colour" : Color(0.6,0.71,1,1),
-		"sizeRange" : [1.8,4.0],
+		"sizeRange" : [1.8,3.0],
 		"chance" : [0.97,0.99]
 	},
 	STARTYPE.A : {

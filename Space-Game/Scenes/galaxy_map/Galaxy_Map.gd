@@ -35,6 +35,8 @@ var currentStarGlobal : Vector2					# Global Position of the current star
 # Ship 
 var shipLocation
 var isInSystem := false
+var shipRadius := 1000.0
+var shipRadiusWait := false
 
 export var speed := 250
 export (int, 1, 10) var searchRadius 
@@ -45,6 +47,7 @@ var lNodes = []
 
 var shipMoving = false
 var mSpeed = 2.0
+var canPlot = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -115,7 +118,7 @@ func moveShip(dest : Vector2):
 func eraseLines():
 	if line_2d.visible:
 		line_2d.hide()
-	for x in get_children():
+	for x in $potentialContainer.get_children():
 		if "line_" in x.name:
 			x.queue_free()
 
@@ -133,16 +136,22 @@ func drawCells():
 		line.name = pName
 		line.points = PoolVector2Array([toScreen, ship.position])
 		line.show()
-		add_child(line, true)
+		$potentialContainer.add_child(line, true)
 
 func highlightStar(star):
-	if star in potentialStars:
-		print("Star is in potential stars")
-		targetStar = star
-		setTargetStarLocation()
-		line_2d.points = PoolVector2Array([targetStarGlobal, ship.position])
-		line_2d.show()
-		updateSystemPanel(targetStarGlobal)
+	targetStar = star
+	setTargetStarLocation()
+	print("DISTANCE TO LOCATION : ", targetStar.global_position.distance_to(currentStarGlobal))
+	match star in potentialStars:
+		true:
+			print("Star is in potential stars")
+			line_2d.points = PoolVector2Array([targetStarGlobal, ship.position])
+			line_2d.show()
+			updateSystemPanel(star)
+		false:
+			print("star is outside potential stars")
+			canPlot = true
+			updateSystemPanel(star, false)
 		
 # When arrived at location, set current position as the target position and update destinations
 func arrivedAtStar():
@@ -154,14 +163,21 @@ func arrivedAtStar():
 	cam.position = cam.correctVector(ship.position, cam.limits)
 	
 # Updates the system panel and sets the information to the systems
-func updateSystemPanel(dest : Vector2):
+func updateSystemPanel(star : Area2D, canTravel := true):
 	tPanelSlave.show()
-	var _s : Galaxy.SolarSystem = targetStar.star
-	tPanelSlave.global_position = dest + Vector2(10,0)
+	var _s : Galaxy.SolarSystem = star.star
+	tPanelSlave.global_position = star.global_position + Vector2(10,0)
 	$tPaneSlave/TPanel/PlanetNum.text = str("Planets : ",_s.planetNum)
 	$tPaneSlave/TPanel/SystemName.text = _s.name
+	match canTravel:
+		true:
+			$tPaneSlave/TPanel/PlotRoute.hide()
+			$tPaneSlave/TPanel/Travel.show()
+		false:
+			$tPaneSlave/TPanel/PlotRoute.show()
+			$tPaneSlave/TPanel/Travel.hide()
 #	$TPanel/PlanetNum.text = str("No Data")
-	#cam._moveToLocation(_centerCoords(tile.map_to_world(dest)))
+	cam._moveToLocation(star.global_position)
 
 # Updates the label in the bottom to the cuurent coordinates
 func updateLabel():
@@ -219,9 +235,10 @@ func deleteClusters():
 ################################################################################
 
 func setButtonSignals():
-	$tPaneSlave/TPanel/Travel.connect("button_down", self, "travelSystem")
-	$tPaneSlave/TPanel/System.connect("button_down", self, "openSystemMap")
-	$tPaneSlave/TPanel/Back.connect("button_down", self, "hidePanel")
+	$tPaneSlave/TPanel/Travel.connect("pressed", self, "travelSystem")
+	$tPaneSlave/TPanel/System.connect("pressed", self, "openSystemMap")
+	$tPaneSlave/TPanel/Back.connect("pressed", self, "hidePanel")
+	$tPaneSlave/TPanel/PlotRoute.connect("pressed", self, "plotRoute")
 
 # Opens the system map
 func openSystemMap():
@@ -238,6 +255,152 @@ func openSystemMap():
 func travelSystem():
 	if currentStar != targetStar:
 		moveShip(targetStarGlobal)
+
+func plotRoute():
+	var plotting = $Plotting/ColorRect
+	if !canPlot:
+		return
+	#plotting.show()
+	var newArea2D = Area2D.new()
+	var newCollisionShape = CollisionShape2D.new()
+	var capsule = CapsuleShape2D.new()
+	
+	newArea2D.name = "searchRadius"
+	newCollisionShape.name = "sRadiusCollider"
+	
+	# Set the current star and target star
+	var star = targetStar
+	var cStar = currentStar
+	var tStar = targetStar
+	var jumpDist = $Ship/Area2D/CollisionShape2D.shape.radius * ship.scale.x
+	
+	var initDist = cStar.global_position.distance_to(tStar.global_position) + 50
+	var initLoc = (cStar.global_position + tStar.global_position)/2
+	
+	# Creates the search radius
+	newArea2D.position = initLoc
+	capsule.radius = max(initDist * 0.25, 200)
+	capsule.height = max(initDist - 2*capsule.radius, 0)
+	newCollisionShape.shape = capsule
+	newCollisionShape.rotation_degrees = rad2deg(cStar.global_position.angle_to_point(tStar.global_position)) + 270 
+		
+	add_child(newArea2D,true)
+	var _sR : Area2D = get_node("searchRadius")
+	_sR.add_child(newCollisionShape,true)
+	var _cR : CollisionShape2D = _sR.get_node("sRadiusCollider")
+	
+	print("CHILD NODE = ",get_node("searchRadius"),"\n\tPosition = ",_sR.global_position,"\n\tRadius = ",_cR.shape.radius)
+	
+	_sR.global_position = _sR.global_position
+	_cR.position = Vector2(0,0)
+	yield(get_tree(), "idle_frame")
+	yield(get_tree(), "idle_frame")
+	
+	print(_cR.shape.radius)
+	print(_cR.shape.height)
+	print(_sR.global_position)
+	print(_cR.rotation_degrees)
+
+	var potStars = _sR.get_overlapping_areas()
+	print(_sR.get_overlapping_areas().size())
+	print(cStar in _sR.get_overlapping_areas())
+	print(tStar in _sR.get_overlapping_areas())
+
+	var err = false 			# error in routeplanning
+	var starsInRoute = []
+	# Make arrays to contain the
+	print("current star : ",currentStar.star.name)
+	print("Plotting route to :",targetStar.star.name)
+	
+	var _resolved = false
+	var _plotting = true
+	while _plotting:
+		starsInRoute = []
+		starsInRoute.append(currentStar)
+		cStar = currentStar
+		_resolved = false
+		while !_resolved:
+			
+			# Set Radius and Refresh Position, Wait for two physics frames
+			var rad = cStar.global_position.distance_to(tStar.global_position) + 10
+			_sR.global_position = _sR.global_position
+			_cR.shape.radius = rad
+			_cR.position = Vector2(0,0)
+			yield(get_tree(), "idle_frame")
+			yield(get_tree(), "idle_frame")
+			
+			# Get initial star array
+			var overlapBuffer = _sR.get_overlapping_areas()
+			var overlap = []
+			match overlapBuffer.size() < potStars.size():
+				true:
+					for _s in overlapBuffer:
+						if potStars.has(_s):
+							overlap.append(_s)
+				false:
+					for _s in potStars:
+						if overlapBuffer.has(_s):
+							overlap.append(_s)
+			
+			# Sort out unneeded stars and objects
+			if overlap.find(ship.get_node("Area2D")) != -1: 	# For Ship
+				overlap.remove(overlap.find(ship.get_node("Area2D")))
+			if overlap.find(cStar) != -1:						# For current star
+				overlap.remove(overlap.find(cStar))
+
+			# Get stars that can be jumped to and their distance to the target star
+			var cStars = []
+			var cDists = []
+			for i in range(0, overlap.size()):
+				var cDist = overlap[i].global_position.distance_to(cStar.global_position)
+				var tDist = overlap[i].global_position.distance_to(tStar.global_position)
+				if cDist < jumpDist:
+					cStars.append(overlap[i])
+					cDists.append(tDist)
+					
+			if cStars.size() == 0:
+				_resolved = true
+				continue
+						
+			var sCDist = cDists.find(min_arr(cDists))
+			var nCStar = cStars[sCDist]
+						
+			starsInRoute.append(nCStar)
+			
+			if nCStar.global_position.distance_to(tStar.global_position) < jumpDist:
+				starsInRoute.append(tStar)
+				_resolved = true
+				_plotting = false
+				continue			
+
+			# Else Continue with new data
+			cStar = nCStar
+	
+	_sR.queue_free()
+	print("Route Length : ",starsInRoute.size())
+		
+	erasePlot()
+	for i in range(0,starsInRoute.size()):
+		var from
+		if i == 0:
+			from = currentStarGlobal
+		else:
+			from = starsInRoute[i-1].global_position
+		var to = starsInRoute[i].global_position
+
+		var line = load("res://Scenes/galaxy_map/mapPlotLine.tscn").instance()
+		var lName = str("plot_",from,"-",to)
+		line.name = lName
+		line.points = PoolVector2Array([from, to])
+		line.show()
+		$mapPlotContainer.add_child(line, true)
+	canPlot = false
+	plotting.hide()
+	
+func erasePlot():
+	for x in $mapPlotContainer.get_children():
+		if "plot_" in x.name:
+			x.queue_free()
 
 # Hides the panel
 func hidePanel():
@@ -294,8 +457,21 @@ func buffer(at : Vector2, dest : Vector2, buffer: float):
 			return true
 	return false
 
+# Returns the minimum value in an array
+func min_arr(array):
+	var min_val = array[0]
+	for i in range(0,array.size()):
+		min_val = min(min_val, array[i])
+	return min_val
 
-
+func _physics_process(delta):
+	pass
 
 func _on_Area2D_area_entered(area):
 	pass # Replace with function body.
+
+class MyCustomSorter:
+		static func sort(a, b):
+			if a[1] < b[1]:
+				return true
+			return false

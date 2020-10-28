@@ -37,7 +37,6 @@ func _moveToLocation(dest : Vector2):
 
 func _unFocus():
 	focused = false
-	tPanel.hide()
 
 func _process(delta):
 	var vecs
@@ -45,8 +44,8 @@ func _process(delta):
 		if buffer(position, destination, buff):
 			print("howdydoda")
 			moving = false
-			tPanel.rect_position = Vector2(330,190)
-			tPanel.show()
+			if focused:
+				_unFocus()
 			return
 		vecs = Vector2(lerp(position.x,destination.x,mSpeed * delta),lerp(position.y,destination.y,mSpeed * delta))
 		position = correctVector(vecs, limits)

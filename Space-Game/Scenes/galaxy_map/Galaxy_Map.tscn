@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://icon.png" type="Texture" id=1]
 [ext_resource path="res://Scenes/Test/starfield.shader" type="Shader" id=2]
@@ -17,6 +17,9 @@ font_data = ExtResource( 7 )
 [sub_resource type="CircleShape2D" id=2]
 resource_local_to_scene = true
 radius = 1000.0
+
+[sub_resource type="RectangleShape2D" id=4]
+extents = Vector2( 500, 100 )
 
 [sub_resource type="ShaderMaterial" id=3]
 shader = ExtResource( 2 )
@@ -47,6 +50,17 @@ margin_top = 53.3096
 margin_right = 126.52
 margin_bottom = 73.3096
 text = "Travel"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PlotRoute" type="Button" parent="tPaneSlave/TPanel"]
+visible = false
+margin_left = 6.51996
+margin_top = 53.3096
+margin_right = 126.52
+margin_bottom = 73.3096
+text = "Plot Route"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -102,7 +116,6 @@ z_index = 1
 texture = ExtResource( 4 )
 
 [node name="Area2D" type="Area2D" parent="Ship"]
-collision_layer = 512
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Ship/Area2D"]
 shape = SubResource( 2 )
@@ -121,6 +134,15 @@ z_index = -1
 z_as_relative = false
 width = 2.0
 default_color = Color( 1, 1, 1, 1 )
+
+[node name="potentialContainer" type="Node2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="potentialContainer"]
+visible = false
+rotation = -0.202458
+shape = SubResource( 4 )
+
+[node name="mapPlotContainer" type="Node2D" parent="."]
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 layer = -5
@@ -155,6 +177,54 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 scroll_scale = 0.1
+
+[node name="Plotting" type="CanvasLayer" parent="."]
+layer = 5
+
+[node name="ColorRect" type="ColorRect" parent="Plotting"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0.223529, 0.2, 0.2, 0.576471 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Panel" type="Panel" parent="Plotting/ColorRect"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -58.0
+margin_top = -40.0
+margin_right = 58.0
+margin_bottom = 40.0
+
+[node name="Label" type="Label" parent="Plotting/ColorRect/Panel"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -24.5
+margin_top = -13.0
+margin_right = 24.5
+margin_bottom = 1.0
+text = "Plotting"
+align = 1
+valign = 1
+
+[node name="progress" type="Label" parent="Plotting/ColorRect/Panel"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -30.0
+margin_top = 7.0
+margin_right = 30.0
+margin_bottom = 21.0
+text = "1...2...3..."
+align = 1
+valign = 1
 
 [node name="Pause_Menu" parent="." instance=ExtResource( 6 )]
 [connection signal="area_entered" from="Ship/Area2D" to="." method="_on_Area2D_area_entered"]
