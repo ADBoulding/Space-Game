@@ -198,7 +198,7 @@ func updateClusters():
 			var offset = Vector2(i,j)
 			var cluster = currentClusterID + offset
 			clusters.append(cluster)
-	print("Current Clusters : ",clusters)
+	#print("Current Clusters : ",clusters)
 	drawClusters()
 	deleteClusters()
 	pass
@@ -208,13 +208,15 @@ func drawClusters():
 	var todraw = []
 	for cluster in clusters:
 		if !drawnClusters.has(cluster):
+			if !Global.clusterContainer.has(cluster):
+				continue
 			drawnClusters.append(cluster)
 			var _cluster = _c.instance()
 			_cluster.getID(cluster)
 			_cluster.position = cluster * Galaxy.clusterSize * Galaxy.cellSize - Vector2(clusterOffset,clusterOffset)
 			_cluster.generateCluster()
 			_cluster.name = str("c_",cluster)
-			print("Cluster : ",cluster,"\n\tPosition : ",_cluster.position)
+			#print("Cluster : ",cluster,"\n\tPosition : ",_cluster.position)
 			container.add_child(_cluster, true)
 	for child in container.get_children():
 		for star in child.get_children():
@@ -226,7 +228,6 @@ func deleteClusters():
 		if !clusters.has(cluster):
 			container.get_node(str("c_",cluster)).queue_free()
 			drawnClusters.remove(drawnClusters.find(cluster))
-
 
 ################################################################################
 ################################################################################
@@ -289,23 +290,13 @@ func plotRoute():
 	_sR.add_child(newCollisionShape,true)
 	var _cR : CollisionShape2D = _sR.get_node("sRadiusCollider")
 	
-	print("CHILD NODE = ",get_node("searchRadius"),"\n\tPosition = ",_sR.global_position,"\n\tRadius = ",_cR.shape.radius)
-	
 	_sR.global_position = _sR.global_position
 	_cR.position = Vector2(0,0)
 	yield(get_tree(), "idle_frame")
 	yield(get_tree(), "idle_frame")
 	
-	print(_cR.shape.radius)
-	print(_cR.shape.height)
-	print(_sR.global_position)
-	print(_cR.rotation_degrees)
-
 	var potStars = _sR.get_overlapping_areas()
-	print(_sR.get_overlapping_areas().size())
-	print(cStar in _sR.get_overlapping_areas())
-	print(tStar in _sR.get_overlapping_areas())
-
+	
 	var err = false 			# error in routeplanning
 	var starsInRoute = []
 	# Make arrays to contain the

@@ -1,4 +1,5 @@
 extends Node2D
+class_name System
 
 signal clickedOn
 
@@ -53,7 +54,6 @@ func _on_Area2D_mouse_entered():
 	label.text = star.name
 	label.show()
 	pass # Replace with function body.
-
 
 func _on_Area2D_mouse_exited():
 	label.hide()

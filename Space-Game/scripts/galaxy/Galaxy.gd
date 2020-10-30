@@ -258,6 +258,17 @@ class SolarSystem:
 			sJSON["planets"][i] = pJ
 		return sJSON
 		
+	func _loadFromJSON(_JSON):
+		self.name = _JSON["name"]
+		self.starSize = _JSON["starSize"]
+		self.starType = int(_JSON["starType"])
+		self.planetNum = int(_JSON["planetNum"])
+		self.hasData = _JSON["hasData"]
+		for p in _JSON["planets"]:
+			var planet = Galaxy.Planet.new()
+			planet._loadFromJSON(_JSON["planets"][p])
+			self.planets.append(planet)
+		
 class Planet:
 	# Storage for id
 	var name = ""
@@ -291,7 +302,9 @@ class Planet:
 	var c2t = 0.516
 	var c3t = 0.634
 
-	func _init(planetDictionary):
+	func _init(planetDictionary = null):
+		if planetDictionary == null:
+			return
 		var _p = planetDictionary
 		id = _p["id"]
 		locID = _p["localID"]
@@ -336,3 +349,26 @@ class Planet:
 			"c3t" : self.c3t,
 		}
 		return pJSON
+		
+	func _loadFromJSON(_JSON):
+		var _p = _JSON
+		self.locID = _p["locID"]
+		self.name = _p["name"]
+		self.planetType = int(_p["planetType"])
+		self.hasAtmosphere = _p["hasAtmosphere"]
+		self.radius = _p["radius"]
+		self.rotation = _p["rotation"]
+		self.colour1 = Color(_p["colours"][0][0],_p["colours"][0][1],_p["colours"][0][2],_p["colours"][0][3])
+		self.colour2 = Color(_p["colours"][1][0],_p["colours"][1][1],_p["colours"][1][2],_p["colours"][1][3])
+		self.colour3 = Color(_p["colours"][2][0],_p["colours"][2][1],_p["colours"][2][2],_p["colours"][2][3])
+		self.c1t = _p["thresholds"][0]
+		self.c2t = _p["thresholds"][1]
+		self.c3t = _p["thresholds"][2]
+		self.nSeed = _p["nSeed"]
+		self.octaves = int(_p["octaves"])
+		self.period = _p["period"]
+		self.persistence = _p["persistence"]
+		self.lacunarity = _p["lacunarity"]
+		
+	func _loadFromDict(_dict):
+		pass

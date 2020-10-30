@@ -18,10 +18,10 @@ font_data = ExtResource( 7 )
 resource_local_to_scene = true
 radius = 1000.0
 
-[sub_resource type="RectangleShape2D" id=4]
+[sub_resource type="RectangleShape2D" id=3]
 extents = Vector2( 500, 100 )
 
-[sub_resource type="ShaderMaterial" id=3]
+[sub_resource type="ShaderMaterial" id=4]
 shader = ExtResource( 2 )
 shader_param/octaves = 5
 shader_param/viewport_size = Vector2( 320, 180 )
@@ -140,7 +140,7 @@ default_color = Color( 1, 1, 1, 1 )
 [node name="CollisionShape2D" type="CollisionShape2D" parent="potentialContainer"]
 visible = false
 rotation = -0.202458
-shape = SubResource( 4 )
+shape = SubResource( 3 )
 
 [node name="mapPlotContainer" type="Node2D" parent="."]
 
@@ -164,7 +164,7 @@ __meta__ = {
 
 [node name="Sky" type="TextureRect" parent="CanvasLayer/ParallaxBackground"]
 show_behind_parent = true
-material = SubResource( 3 )
+material = SubResource( 4 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_bottom = 3.05176e-05

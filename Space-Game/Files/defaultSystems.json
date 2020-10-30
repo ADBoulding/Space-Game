@@ -1,0 +1,148 @@
+{
+  "startingSystem": {
+    "name": "Omicron Persei",
+    "jumpRange": 0,
+    "planets": {
+      "0": {
+        "name": "Scooby",
+        "locID": 0,
+        "discovered": true,
+        "planetType": 2,
+        "hasAtmosphere": false,
+        "rotation": 0.2,
+        "settlement": false,
+        "nSeed": 123456789,
+        "octaves": 8,
+        "period": 140.0,
+        "persistence": 0.75,
+        "lacunarity": 3.5,
+        "radius": 0.6,
+        "colours": [
+          [0.69, 0.69, 0.69, 1],
+          [0.58, 0.58, 0.58, 1],
+          [0.34, 0.34, 0.34, 1]
+        ],
+        "thresholds": [0.45, 0.5, 0.55]
+      },
+      "1": {
+        "name": "Dooby",
+        "locID": 1,
+        "discovered": true,
+        "planetType": 0,
+        "hasAtmosphere": true,
+        "rotation": 0.1,
+        "settlement": true,
+        "nSeed": 321654,
+        "octaves": 6,
+        "period": 140.0,
+        "persistence": 0.6,
+        "lacunarity": 2.0,
+        "radius": 1.4,
+        "colours": [
+          [0.33, 0.45, 0.53, 1],
+          [0.88, 0.91, 0.67, 1],
+          [0.58, 0.88, 0.51, 1]
+        ],
+        "thresholds": [0.45, 0.50, 0.55]
+      },
+      "2": {
+        "name": "Doo",
+        "locID": 2,
+        "discovered": true,
+        "planetType": 2,
+        "hasAtmosphere": false,
+        "rotation": -0.2,
+        "settlement": false,
+        "nSeed": 987432,
+        "octaves": 8,
+        "period": 140.0,
+        "persistence": 0.86,
+        "lacunarity": 4.0,
+        "radius": 1.1,
+        "colours": [
+          [0.69, 0.69, 0.69, 1],
+          [0.58, 0.58, 0.58, 1],
+          [0.34, 0.34, 0.34, 1]
+        ],
+        "thresholds": [0.45, 0.5, 0.55]
+      }
+    },
+    "starSize": 3,
+    "starType": 1,
+    "planetNum": 3,
+    "hasData": true
+  },
+  "destSystem": {
+    "name": "Omicron Persei 9",
+    "jumpRange": 3,
+    "planets": {
+      "0": {
+        "name": "Scooby2",
+        "locID": 0,
+        "discovered": true,
+        "planetType": 2,
+        "hasAtmosphere": false,
+        "rotation": 0.2,
+        "settlement": false,
+        "nSeed": 123456789,
+        "octaves": 8,
+        "period": 140.0,
+        "persistence": 0.75,
+        "lacunarity": 3.5,
+        "radius": 0.6,
+        "colours": [
+          [0.69, 0.69, 0.69, 1],
+          [0.58, 0.58, 0.58, 1],
+          [0.34, 0.34, 0.34, 1]
+        ],
+        "thresholds": [0.45, 0.5, 0.55]
+      },
+      "1": {
+        "name": "Dooby2",
+        "locID": 1,
+        "discovered": true,
+        "planetType": 0,
+        "hasAtmosphere": true,
+        "rotation": 0.1,
+        "settlement": true,
+        "nSeed": 321654,
+        "octaves": 6,
+        "period": 140.0,
+        "persistence": 0.6,
+        "lacunarity": 2.0,
+        "radius": 1.4,
+        "colours": [
+          [0.33, 0.45, 0.53, 1],
+          [0.88, 0.91, 0.67, 1],
+          [0.58, 0.88, 0.51, 1]
+        ],
+        "thresholds": [0.45, 0.50, 0.55]
+      },
+      "2": {
+        "name": "Doo2",
+        "locID": 2,
+        "discovered": true,
+        "planetType": 2,
+        "hasAtmosphere": false,
+        "rotation": -0.2,
+        "settlement": false,
+        "nSeed": 987432,
+        "octaves": 8,
+        "period": 140.0,
+        "persistence": 0.86,
+        "lacunarity": 4.0,
+        "radius": 1.1,
+        "colours": [
+          [0.69, 0.69, 0.69, 1],
+          [0.58, 0.58, 0.58, 1],
+          [0.34, 0.34, 0.34, 1]
+        ],
+        "thresholds": [0.45, 0.5, 0.55]
+      }
+    },
+    "starSize": 3,
+    "starType": 1,
+    "planetNum": 3,
+    "hasData": true
+  }
+}

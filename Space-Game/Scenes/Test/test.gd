@@ -45,3 +45,38 @@ func saveFile():
 	for c in _d:
 		clusterJSON[c] = _d[c]._toJSON()
 	return clusterJSON
+	
+func loadDefaultSystems():
+	var filePath = "res://Files/defaultSystems.json"
+	var file = File.new()
+	if not file.file_exists(filePath):
+		print("AWE SHIIIIIIT")
+		return
+	print("FILE EXISTS")
+	file.open(filePath, file.READ)
+	
+	var text = file.get_as_text()
+	var data = parse_json(text)
+	file.close()
+	
+	for bit in data:
+		print(bit)
+
+func _on_default_Systems_pressed():
+	var filePath = "res://Files/defaultSystems.json"
+	var file = File.new()
+	if not file.file_exists(filePath):
+		print("AWE SHIIIIIIT")
+		return
+	print("FILE EXISTS")
+	file.open(filePath, file.READ)
+	
+	var text = file.get_as_text()
+	var data = JSON.parse(text).result
+	file.close()
+	
+	var system = Galaxy.SolarSystem.new("",0,false)
+	system._loadFromJSON(data["startingSystem"])	
+	
+	for _p in system.planets:
+		print(_p.name)

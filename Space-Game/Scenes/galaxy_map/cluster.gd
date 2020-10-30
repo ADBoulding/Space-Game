@@ -1,4 +1,5 @@
 extends Node2D
+class_name Cluster
 
 var stars = []
 var ID : Vector2
