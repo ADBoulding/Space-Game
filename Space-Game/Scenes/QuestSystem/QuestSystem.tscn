@@ -5,10 +5,64 @@
 [node name="QuestSystem" type="Node"]
 script = ExtResource( 1 )
 
-[node name="Available" type="Node" parent="."]
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
 
-[node name="Active" type="Node" parent="."]
+[node name="Quest_Panel" type="ColorRect" parent="CanvasLayer"]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -74.0
+margin_top = -74.0
+margin_right = 74.0
+margin_bottom = 74.0
+color = Color( 0.396078, 0.4, 0.482353, 0.396078 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="Completed" type="Node" parent="."]
+[node name="Start" type="Button" parent="CanvasLayer/Quest_Panel"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -42.0
+margin_top = 13.0
+margin_right = 42.0
+margin_bottom = 33.0
+text = "Start Quest"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="Delivered" type="Node" parent="."]
+[node name="End" type="Button" parent="CanvasLayer/Quest_Panel"]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -42.0
+margin_top = 40.1724
+margin_right = 42.0
+margin_bottom = 60.1724
+text = "End Quest"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="CanvasLayer/Quest_Panel"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -37.5
+margin_top = -57.3358
+margin_right = 37.5
+margin_bottom = -43.3358
+text = "Quest Title:"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+[connection signal="pressed" from="CanvasLayer/Quest_Panel/Start" to="." method="_on_Start_pressed"]
+[connection signal="pressed" from="CanvasLayer/Quest_Panel/End" to="." method="_on_End_pressed"]

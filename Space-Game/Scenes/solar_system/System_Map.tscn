@@ -1,9 +1,6 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=13 format=2]
 
-[ext_resource path="res://Fonts/MainFont_25.tres" type="DynamicFont" id=1]
 [ext_resource path="res://Fonts/font.tres" type="DynamicFont" id=2]
-[ext_resource path="res://Scenes/solar_system/planetInfo.gd" type="Script" id=3]
-[ext_resource path="res://assets/GUI/PlanetInfo.png" type="Texture" id=4]
 [ext_resource path="res://Scenes/Planet_Gen/4MUGBG.jpg" type="Texture" id=5]
 [ext_resource path="res://scripts/galaxy/SolarSystem.gd" type="Script" id=6]
 [ext_resource path="res://Scenes/solar_system/systemCamera.gd" type="Script" id=7]
@@ -12,13 +9,15 @@
 [ext_resource path="res://Scenes/galaxy_map/Starfield.gd" type="Script" id=10]
 [ext_resource path="res://Scenes/Test/starfield.shader" type="Shader" id=11]
 
-[sub_resource type="PanoramaSky" id=4]
+[sub_resource type="PanoramaSky" id=1]
 radiance_size = 5
 panorama = ExtResource( 5 )
 
 [sub_resource type="Environment" id=2]
+resource_local_to_scene = true
 background_mode = 4
-background_sky = SubResource( 4 )
+background_sky = SubResource( 1 )
+background_color = Color( 0.137255, 0.0784314, 0.113725, 1 )
 background_canvas_max_layer = -5
 ambient_light_color = Color( 1, 0.996078, 0.976471, 1 )
 
@@ -26,7 +25,7 @@ ambient_light_color = Color( 1, 0.996078, 0.976471, 1 )
 radius = 10.0
 height = 20.0
 
-[sub_resource type="ShaderMaterial" id=5]
+[sub_resource type="ShaderMaterial" id=4]
 shader = ExtResource( 11 )
 shader_param/octaves = 5
 shader_param/viewport_size = Vector2( 320, 180 )
@@ -49,6 +48,7 @@ __meta__ = {
 }
 
 [node name="Galaxy_Map" type="Button" parent="Control"]
+visible = false
 anchor_top = 1.0
 anchor_bottom = 1.0
 margin_left = 13.2142
@@ -81,68 +81,6 @@ script = ExtResource( 7 )
 [node name="CSGMesh" type="CSGMesh" parent="."]
 mesh = SubResource( 3 )
 
-[node name="planetInfo" type="Control" parent="."]
-anchor_left = 1.0
-anchor_right = 1.0
-margin_left = -220.0
-margin_bottom = 360.0
-script = ExtResource( 3 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="TextureRect" type="TextureRect" parent="planetInfo"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-texture = ExtResource( 4 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="BuiltIn" type="ColorRect" parent="planetInfo/TextureRect"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_top = 0.420456
-margin_bottom = 0.420441
-color = Color( 1, 1, 1, 0 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Label" type="Label" parent="planetInfo/TextureRect/BuiltIn"]
-margin_left = 14.0
-margin_top = 56.0
-margin_right = 77.0
-margin_bottom = 79.0
-custom_fonts/font = ExtResource( 1 )
-text = "Planet Type"
-align = 1
-valign = 1
-
-[node name="Title" type="Label" parent="planetInfo/TextureRect"]
-margin_left = 14.0
-margin_top = 21.0
-margin_right = 206.0
-margin_bottom = 53.0
-custom_fonts/font = ExtResource( 2 )
-custom_colors/font_color = Color( 1, 1, 1, 1 )
-text = "Planet A"
-align = 1
-valign = 1
-
-[node name="Planet_Type" type="Label" parent="planetInfo/TextureRect"]
-margin_left = 78.0
-margin_top = 56.0
-margin_right = 206.0
-margin_bottom = 79.0
-custom_fonts/font = ExtResource( 1 )
-text = "Waterworld"
-align = 1
-valign = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
 [node name="Pause_Menu" parent="." instance=ExtResource( 8 )]
 
 [node name="container" type="Node2D" parent="."]
@@ -151,7 +89,7 @@ __meta__ = {
 layer = -5
 
 [node name="BSky" type="TextureRect" parent="CanvasLayer"]
-material = SubResource( 5 )
+material = SubResource( 4 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
@@ -162,5 +100,4 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 [connection signal="finishedGen" from="." to="Camera" method="_on_System_finishedGen"]
-[connection signal="finishedGen" from="." to="planetInfo" method="_on_System_finishedGen"]
 [connection signal="pressed" from="Control/Galaxy_Map" to="." method="_on_Galaxy_Map_pressed"]

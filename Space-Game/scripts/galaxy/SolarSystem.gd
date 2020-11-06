@@ -16,20 +16,30 @@ var planets = []
 
 var isManual = false
 
-# Called when the node enters the scene tree for the first time.
 func _ready():
-	match Global.clusterContainer.size():
-		0:
-			system = Galaxy.SolarSystem.new("",-1,true)
+	initialize()
+
+func initialize(_system : Galaxy.SolarSystem = null):
+	match _system:
+		null:
+			match Global.clusterContainer.size():
+				0:
+					system = Galaxy.SolarSystem.new("",-1,true)
+					systemID = Vector2.ZERO
+					clusterID = Vector2.ZERO
+					isManual = true
+				_:
+					systemID = Global.currentSystemID
+					clusterID = Global.currentClusterID
+					system = Global.clusterContainer[clusterID].systems[systemID]
+		_:
+			system = _system
 			systemID = Vector2.ZERO
 			clusterID = Vector2.ZERO
 			isManual = true
-		_:
-			systemID = Global.currentSystemID
-			clusterID = Global.currentClusterID
-			system = Global.clusterContainer[clusterID].systems[systemID]
+	
 	genPlanets()
-		
+
 func genPlanets():
 	for _p in system.planets:
 		var planet = planetResource.instance()
@@ -44,7 +54,7 @@ func genPlanets():
 		container.add_child(planet)
 		var _planet = container.get_node(pName)
 		_planet.connect("clickedOn", cam, "_focus", [_p.locID])
-		emit_signal("finishedGen")
+	emit_signal("finishedGen")
 
 func _on_Galaxy_Map_pressed():
 	if isManual:

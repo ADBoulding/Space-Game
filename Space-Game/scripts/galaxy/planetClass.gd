@@ -1,5 +1,4 @@
 extends MeshInstance
-class_name Planet
 
 export var SystemID: int
 export var ID: int

@@ -16,7 +16,7 @@ font_data = ExtResource( 7 )
 
 [sub_resource type="CircleShape2D" id=2]
 resource_local_to_scene = true
-radius = 1000.0
+radius = 1500.0
 
 [sub_resource type="RectangleShape2D" id=3]
 extents = Vector2( 500, 100 )
@@ -30,7 +30,6 @@ shader_param/offset = Vector2( 0, 0 )
 
 [node name="Node" type="Node"]
 script = ExtResource( 5 )
-searchRadius = 5
 
 [node name="tPaneSlave" type="Node2D" parent="."]
 visible = false
@@ -147,15 +146,24 @@ shape = SubResource( 3 )
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 layer = -5
 
-[node name="Label" type="Label" parent="CanvasLayer"]
-margin_left = 8.51466
-margin_top = 321.141
-margin_right = 62.5147
-margin_bottom = 352.141
-text = "Sector:
-0/0"
-align = 1
+[node name="Sector" type="Label" parent="CanvasLayer"]
+margin_left = 8.515
+margin_top = 290.693
+margin_right = 77.515
+margin_bottom = 321.693
+text = "Sector: 0/0"
 valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PlotInfo" type="Label" parent="CanvasLayer"]
+margin_left = 9.0
+margin_top = 320.267
+margin_right = 153.0
+margin_bottom = 351.267
+text = "Destination System	: 
+Jumps to destination	: "
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -167,6 +175,8 @@ show_behind_parent = true
 material = SubResource( 4 )
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_left = -0.629974
+margin_right = -0.630005
 margin_bottom = 3.05176e-05
 mouse_filter = 2
 texture = ExtResource( 1 )

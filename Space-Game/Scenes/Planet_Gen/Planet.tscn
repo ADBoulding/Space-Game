@@ -3,34 +3,34 @@
 [ext_resource path="res://Scenes/Planet_Gen/cloud_Shader.shader" type="Shader" id=1]
 [ext_resource path="res://Scenes/Planet_Gen/Planet_Shader.shader" type="Shader" id=2]
 
-[sub_resource type="SphereMesh" id=1]
+[sub_resource type="SphereMesh" id=8]
 resource_local_to_scene = true
 
-[sub_resource type="OpenSimplexNoise" id=2]
-seed = 20
+[sub_resource type="OpenSimplexNoise" id=6]
+seed = 24
 octaves = 8
-period = 145.0
-persistence = 0.408
-lacunarity = 2.81
+period = 190.2
+persistence = 0.643
+lacunarity = 2.57
 
-[sub_resource type="NoiseTexture" id=3]
+[sub_resource type="NoiseTexture" id=7]
 width = 400
 height = 400
 seamless = true
-noise = SubResource( 2 )
+noise = SubResource( 6 )
 
-[sub_resource type="ShaderMaterial" id=4]
+[sub_resource type="ShaderMaterial" id=9]
 resource_local_to_scene = true
 shader = ExtResource( 2 )
 shader_param/colour1 = Color( 0.33, 0.45, 0.53, 1 )
 shader_param/colour2 = Color( 0.88, 0.91, 0.67, 1 )
 shader_param/colour3 = Color( 0.58, 0.88, 0.51, 1 )
-shader_param/colour1_Threshold = 0.384
-shader_param/colour2_Threshold = 0.418
+shader_param/colour1_Threshold = 0.36
+shader_param/colour2_Threshold = 0.459
 shader_param/colour3_Threshold = 0.6
-shader_param/Base_Albedo = SubResource( 3 )
+shader_param/Base_Albedo = SubResource( 7 )
 
-[sub_resource type="GDScript" id=5]
+[sub_resource type="GDScript" id=10]
 script/source = "extends MeshInstance
 
 onready var collider : CollisionShape = $Area/CollisionShape
@@ -46,7 +46,7 @@ export var c1t = 0.428
 export var c2t = 0.516
 export var c3t = 0.634
 
-var planetData : Galaxy.Planet
+var planetData : Galaxy.Planet = null
 
 var nSeed = 1
 var octaves = 1
@@ -101,8 +101,9 @@ func _ready()->void:
 	_load_planet()
 
 func _process(delta):
-	rotate_y(delta * planetData.rotation/planetData.radius)
-	clouds.rotate_y(delta * -planetData.rotation/planetData.radius/5)
+	if planetData != null:
+		rotate_y(delta * planetData.rotation/planetData.radius)
+		clouds.rotate_y(delta * -planetData.rotation/planetData.radius/5)
 
 func _on_Area_input_event(camera, event, click_position, click_normal, shape_idx):
 	if event is InputEventMouseButton:
@@ -110,33 +111,33 @@ func _on_Area_input_event(camera, event, click_position, click_normal, shape_idx
 			emit_signal(\"clickedOn\")
 "
 
-[sub_resource type="SphereMesh" id=6]
+[sub_resource type="SphereMesh" id=11]
 resource_local_to_scene = true
 radius = 1.02
 height = 2.04
 
-[sub_resource type="OpenSimplexNoise" id=7]
+[sub_resource type="OpenSimplexNoise" id=12]
 seed = 6
 octaves = 9
 period = 113.0
 persistence = 0.825
 lacunarity = 2.62
 
-[sub_resource type="NoiseTexture" id=8]
+[sub_resource type="NoiseTexture" id=13]
 width = 400
 height = 400
 seamless = true
-noise = SubResource( 7 )
+noise = SubResource( 12 )
 
-[sub_resource type="ShaderMaterial" id=9]
+[sub_resource type="ShaderMaterial" id=14]
 resource_local_to_scene = true
 shader = ExtResource( 1 )
 shader_param/colour1 = Color( 1, 1, 1, 0 )
 shader_param/colour2 = Color( 1, 1, 1, 1 )
 shader_param/cloudThreshold = 0.46
-shader_param/Base_Albedo = SubResource( 8 )
+shader_param/Base_Albedo = SubResource( 13 )
 
-[sub_resource type="SphereShape" id=10]
+[sub_resource type="SphereShape" id=15]
 resource_local_to_scene = true
 radius = 0.0
 
@@ -144,17 +145,17 @@ radius = 0.0
 "planetInstance",
 ]]
 transform = Transform( 0.999999, 0, -0.00137881, 0, 1, 0, 0.00137881, 0, 0.999999, 0, 0, 0 )
-mesh = SubResource( 1 )
-material/0 = SubResource( 4 )
-script = SubResource( 5 )
+mesh = SubResource( 8 )
+material/0 = SubResource( 9 )
+script = SubResource( 10 )
 colour1 = Color( 0.00392157, 0.0235294, 0.0352941, 1 )
 
 [node name="Clouds" type="MeshInstance" parent="."]
-mesh = SubResource( 6 )
-material/0 = SubResource( 9 )
+mesh = SubResource( 11 )
+material/0 = SubResource( 14 )
 
 [node name="Area" type="Area" parent="."]
 
 [node name="CollisionShape" type="CollisionShape" parent="Area"]
-shape = SubResource( 10 )
+shape = SubResource( 15 )
 [connection signal="input_event" from="Area" to="." method="_on_Area_input_event"]

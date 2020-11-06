@@ -17,7 +17,7 @@ var defaultSystems = {}
 
 var CurrentLocation = {
 	"cluster" : Vector2.ZERO,
-	"system" : Galaxy.startSystem,
+	"system" : Vector2.ZERO,
 	"planet" : -1
 }
 
@@ -75,18 +75,20 @@ func loadDefaultSystems():
 		system._loadFromJSON(data[sys])
 		defaultSystems[sys] = {
 			"system" : system,
+			"coord" : Vector2.ZERO,
 			"jumpRange" : int(jumpDist)
 		}
 		
-#	for system in defaultSystems:
-#		print(defaultSystems[system]["system"].name,", ",defaultSystems[system]["jumpRange"])
-#		if system == "startingSystem":
-#			clusterContainer[Vector2(0,0)].systems[Galaxy.startSystem] = defaultSystems[system]["system"]
-#		elif system == "destSystem":
-#			var coords = clusterContainer[Vector2(0,0)].systems.keys()
-#			var coord = coords[Global.rng.randi_range(0,coords.size())]
-#			print(coord)
-#			clusterContainer[Vector2(0,0)].systems[coord] = defaultSystems[system]["system"]
+	for system in defaultSystems:
+		print(defaultSystems[system]["system"].name,", ",defaultSystems[system]["jumpRange"])
+		if system == "startingSystem":
+			clusterContainer[Vector2(0,0)].systems[Galaxy.startSystem] = defaultSystems[system]["system"]
+			defaultSystems[system]["coord"] = Galaxy.startSystem
+		elif system == "destSystem":
+			var coords = clusterContainer[Vector2(0,0)].systems.keys()
+			var coord = coords[Global.rng.randi_range(0,coords.size())]
+			defaultSystems[system]["coord"] = coord
+			clusterContainer[Vector2(0,0)].systems[coord] = defaultSystems[system]["system"]
 
 
 func loadSystemFromDefaults(_sys:String, _coord:Vector2):

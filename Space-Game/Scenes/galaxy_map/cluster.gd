@@ -1,15 +1,14 @@
 extends Node2D
-class_name Cluster
 
 var stars = []
-var ID : Vector2
+var ClusterID : Vector2
 var cluster : Galaxy.Cluster
 		
 func getID(id : Vector2):
-	ID = id
+	ClusterID = id
 		
 func generateCluster():
-	cluster = Global.clusterContainer[ID]
+	cluster = Global.clusterContainer[ClusterID]
 	stars = cluster.systems.keys()
 	var starScene = load("res://Scenes/galaxy_map/star.tscn")
 	for star in stars:

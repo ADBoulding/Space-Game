@@ -1,5 +1,8 @@
 extends Camera
 
+signal focusedOn
+signal unFocused
+
 var normalPosition = Vector3(25.0,0.0,40.0)
 var camPosition = []
 var speed = 10
@@ -14,8 +17,6 @@ enum STATE {
 	UNFOCUSED
 }
 
-onready var planetInfo = get_parent().get_node("planetInfo")
-
 var cameraState 
 
 func _ready():
@@ -28,7 +29,6 @@ func _getPlanets():
 	for node in pNodes:
 		var _position = node.translation
 		_position.z = node.mesh.radius + 2
-		_position.x += .75
 		camPosition.append(_position)
 		
 func _input(event):
@@ -43,6 +43,8 @@ func _input(event):
 						translation.z = 20
 					2:
 						translation.z = 10
+			elif zoomLevel == 2:
+				_focus(0)
 		elif event.is_action_pressed("ui_down"):
 			if zoomLevel > 0:
 				zoomLevel -= 1
@@ -63,9 +65,7 @@ func _input(event):
 				focusedOn += 1
 				_focus(focusedOn)
 		elif event.is_action_pressed("ui_down"):
-			cameraState = STATE.UNFOCUSED
-			planetInfo.hide()
-			_moveToPosition(normalPosition)
+			_unFocus()
 
 func _process(delta):
 	if cameraState == STATE.UNFOCUSED:
@@ -83,9 +83,14 @@ func _focus(id):
 	cameraState = STATE.FOCUSED
 	_moveToPosition(camPosition[id])
 	focusedOn = id
-	if !planetInfo.visible:
-		planetInfo.show()
-	planetInfo._changePlanetInfo(id)
+	emit_signal("focusedOn", focusedOn)
+	
+func _unFocus():
+	focusedOn = -1
+	cameraState = STATE.UNFOCUSED
+	_moveToPosition(normalPosition)
+	zoomLevel = 0
+	emit_signal("unFocused")
 
 func _on_System_finishedGen():
 	_getPlanets()

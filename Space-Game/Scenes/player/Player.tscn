@@ -19,9 +19,5 @@ rotation = 1.5708
 shape = SubResource( 1 )
 
 [node name="Camera2D" type="Camera2D" parent="."]
-limit_left = -130
-limit_top = 0
-limit_right = 770
-limit_bottom = 410
 limit_smoothed = true
 smoothing_enabled = true

@@ -285,6 +285,7 @@ class Planet:
 	var settlement : bool
 
 	#storage for noise parameters
+	var noise
 	var nSeed
 	var octaves
 	var period
@@ -324,6 +325,13 @@ class Planet:
 		period = _p["period"]
 		persistence = _p["persistence"]
 		lacunarity = _p["lacunarity"]
+		
+		noise = OpenSimplexNoise.new()
+		noise.seed = nSeed
+		noise.octaves = octaves
+		noise.period = period
+		noise.persistence = persistence
+		noise.lacunarity = lacunarity
 
 	func _convertToJSON():
 		var pJSON = {

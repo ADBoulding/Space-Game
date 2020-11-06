@@ -1,34 +1,20 @@
 extends Node2D
-class_name System
 
 signal clickedOn
 
 onready var label : Label = $Label
 onready var collider : CollisionShape2D = $CollisionShape2D
 
-var ID : Vector2
+export var ID : Vector2
+export var ClusterID : Vector2
 var star : Galaxy.SolarSystem
-var expanding = false
-var radius = 10.0
+var cluster : Galaxy.Cluster
 
-
-func _ready():
-	pass
-
-func _process(delta):
-	if expanding:
-		if collider.shape.radius >= radius:
-			collider.shape.radius = radius
-			expanding = false
-			return
-		var _r = lerp(collider.shape.radius, radius, delta)
-		collider.shape.radius = _r
-			
-		
-
-func setID(id : Vector2, cluster : Galaxy.Cluster):
+func setID(id : Vector2, _cluster : Galaxy.Cluster):
 	ID = id
-	star = cluster.systems[ID]
+	ClusterID = _cluster.id
+	star = _cluster.systems[ID]
+	cluster = _cluster
 	var size = star.starSize * 2
 	var colour = Galaxy.starColour[star.starType]["colour"]
 	var mat = $Sprite.get_material()
@@ -43,12 +29,6 @@ func _on_Area2D_input_event(viewport, event, shape_idx):
 			print("\tstar size : ",star.starSize)
 			print("\tRANGE : ",Galaxy.starColour[star.starType]["sizeRange"])
 			emit_signal("clickedOn")
-
-
-func radiusExpand(size := 10):
-	radius = size
-	collider.shape.radius = size - 5
-	expanding = true
 
 func _on_Area2D_mouse_entered():
 	label.text = star.name
